@@ -1,18 +1,20 @@
 #include <iostream>
 #include <iomanip>
-struct Day {
-	int val;
-	Day(int v) : val(v){}
-};
+
 
 struct Month {
 	int val;
-	Month(int v) : val(v){}
+	explicit Month(int v) : val(v){}
+};
+
+struct Day {
+	int val;
+	explicit Day(int v) : val(v) {}
 };
 
 struct Year {
 	int val;
-	Year(int v) : val(v){}
+	explicit Year(int v) : val(v){}
 };
 class Date {
 	private:
@@ -21,61 +23,80 @@ class Date {
 		int year;
 		
 		
-		bool isLeapYear(const int& y) { 
-			return (y % 4 == 0 && y % 100 != 0) || (y % 400 == 0); 
-		};
+		static bool isLeapYear(const int& y);
+		static int dayOfMonth(int m, const int& y);
 
-		int dayOfMonth(const int& y, int m) {
-			int monthMax[12] = { 31,(isLeapYear(y)) ? 29 : 28,31,30,31,30,31,31,30,31,30,31 };
-			m = (m % 12 != 0) ? m % 12 : 12;
-			return monthMax[m - 1];
-		}
 	public:
-		Date(int d = 1, int m = 1, int y = 1){
-			y += (m != 12) ? m / 12 : 0;
-			m = (m % 12 != 0) ? m % 12 : 12;
-			d = (dayOfMonth(y, m) < d) ? dayOfMonth(y, m) : d;
-
-			year = y;
-			month = m;
-			day = d;
-		}
+		Date(int m, int d, int y);
 		
 		
-		void printDate() {
-			std::cout << std::setw(2) << std::setfill('0') << month << "-";
-			std::cout << std::setw(2) << std::setfill('0') << day << "-";
-			std::cout << std::setw(4) << std::setfill('0') << year << std::endl;
-		}
-		Date operator+(const Day& x) {
-			int d = day + x.val;
-			int m = month;
-			int y = year;
-			int mMax = dayOfMonth(y, m);
-			while (d > mMax) {
-				d -= mMax;
-				m++;
-				mMax = dayOfMonth(y , m);
-			}
-			
-			return Date(d, m, y);
-		}
-		Date operator+(const Month& x) {
-			int m = month + x.val;
-			int y = year;
-			while (m > 12) {
-				m -= 12;
-				y++;
-			}
-			
-			return Date(day, m, y);
-		}
-		Date operator+(const Year& x) {
-			int y = year + x.val;
-			return Date(day, month, y);
-		}
+		void printDate();
+		
+		Date operator+(const Month&);
+		Date operator+(const Day&);
+		Date operator+(const Year&);
 
 };
+
+	bool Date::isLeapYear(const int& y) {
+		return (y % 4 == 0 && y % 100 != 0) || (y % 400 == 0);
+	};
+
+	int Date::dayOfMonth(int m, const int& y) {
+		int monthMax[12] = { 31,(isLeapYear(y)) ? 29 : 28,31,30,31,30,31,31,30,31,30,31 };
+		m = (m % 12 != 0) ? m % 12 : 12;
+		return monthMax[m - 1];
+	}
+
+	Date::Date(int m = 1, int d = 1, int y = 1) {
+		y += (m != 12) ? m / 12 : 0;
+		m = (m % 12 != 0) ? m % 12 : 12;
+		d = (dayOfMonth(m, y) < d) ? dayOfMonth(m, y) : d;
+
+		year = y;
+		month = m;
+		day = d;
+	}
+
+	Date Date::operator+(const Month& x) {
+		int m = month + x.val;
+		int d = day;
+		int y = year;
+		while (m > 12) {
+			m -= 12;
+			y++;
+		}
+
+		return Date(m, d, y);
+	}
+
+	Date Date::operator+(const Day& x) {
+		int m = month;
+		int d = day + x.val;
+		int y = year;
+		int mMax = dayOfMonth(m, y);
+		while (d > mMax) {
+			d -= mMax;
+			m++;
+			mMax = dayOfMonth(m, y);
+		}
+
+		return Date(m, d, y);
+	}
+
+	Date Date::operator+(const Year& x) {
+		int m = month;
+		int d = day;
+		int y = year + x.val;
+		return Date(m, d, y);
+	}
+
+	void Date::printDate() {
+		std::cout << std::setw(2) << std::setfill('0') << month << "-";
+		std::cout << std::setw(2) << std::setfill('0') << day << "-";
+		std::cout << std::setw(4) << std::setfill('0') << year << std::endl;
+	}
+
 
 int main(){
 	// Test Case 1
