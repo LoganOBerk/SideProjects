@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 struct Day {
 	int val;
 	Day(int v) : val(v){}
@@ -18,78 +19,60 @@ class Date {
 		int day;
 		int month;
 		int year;
-		int dayMax;
-		int monthMax[12] = { 31,28,31,30,31,30,31,31,30,31,30,31 };
 		
-		bool isLeapYear(const int& y) { return (y % 4 == 0 && y % 100 != 0) || (y % 400 == 0); };
-
-		void updateLeapYear(const int& y, int& dMax, int& mMax){ 
-			dMax = (isLeapYear(y)) ? 366 : 365;
-			if(mMax < 30) mMax = (isLeapYear(y)) ? 29 : 28;
-		}
-		Date readjustDate(int d, int m, int y) {
-			d = day + d;
-			m = month + m;
-			y = year + y;
-			int dMax = dayMax;
-			int mMax = monthMax[month - 1];
-			while (d > dMax) {
-				d -= dMax;
-				m += 12;
-				dMax = (isLeapYear(y)) ? 366 : 365;
-			}
-			while (d > mMax) {
-				d -= mMax;
-				m++;
-				mMax = (mMax == 28 && isLeapYear(y)) ? 29 : mMax;
-			}
-			while (m > 12) {
-				m -= 12;
-				y++;
-			}
-			updateLeapYear(y, dMax, mMax);
-
-			if (d > mMax) {
-				d = mMax;
-			}
-			return Date(d, m, y);
-		}
 		
+		bool isLeapYear(const int& y) { 
+			return (y % 4 == 0 && y % 100 != 0) || (y % 400 == 0); 
+		};
+
+		int dayOfMonth(const int& y, int m) {
+			int monthMax[12] = { 31,(isLeapYear(y)) ? 29 : 28,31,30,31,30,31,31,30,31,30,31 };
+			m = (m % 12 != 0) ? m % 12 : 12;
+			return monthMax[m - 1];
+		}
 	public:
-		Date(int d = 1, int m = 1, int y = 1) : day(d), month(m), year(y){
-			updateLeapYear(y, dayMax, monthMax[1]);
+		Date(int d = 1, int m = 1, int y = 1){
+			y += (m != 12) ? m / 12 : 0;
+			m = (m % 12 != 0) ? m % 12 : 12;
+			d = (dayOfMonth(y, m) < d) ? dayOfMonth(y, m) : d;
+
+			year = y;
+			month = m;
+			day = d;
 		}
 		
 		
 		void printDate() {
-			int mpad = (month / 10 >= 1) ? 0 : 1;
-			int dpad = (day / 10 >= 1) ? 0 : 1;
-			int ypad = 0;
-			if ((year / 100) >= 1 && (year / 100) <= 9) ypad = 1;
-			if ((year / 10) >= 1 && (year / 10) <= 9) ypad = 2;
-			if ((year / 1) >= 1 && (year / 1) <= 9) ypad = 3;
-			for (int i = 0; i < mpad; i++) {
-				std::cout << 0;
-			}
-			std::cout << month << "-";
-			for (int i = 0; i < dpad; i++) {
-				std::cout << 0;
-			}
-			std::cout << day << "-";
-			for (int i = 0; i < ypad; i++) {
-				std::cout << 0;
-			}
-			std::cout << year << std::endl;
+			std::cout << std::setw(2) << std::setfill('0') << month << "-";
+			std::cout << std::setw(2) << std::setfill('0') << day << "-";
+			std::cout << std::setw(4) << std::setfill('0') << year << std::endl;
 		}
 		Date operator+(const Day& x) {
-			return readjustDate(x.val, 0, 0);
+			int d = day + x.val;
+			int m = month;
+			int y = year;
+			int mMax = dayOfMonth(y, m);
+			while (d > mMax) {
+				d -= mMax;
+				m++;
+				mMax = dayOfMonth(y , m);
+			}
+			
+			return Date(d, m, y);
 		}
 		Date operator+(const Month& x) {
-
-			return readjustDate(0, x.val, 0);
+			int m = month + x.val;
+			int y = year;
+			while (m > 12) {
+				m -= 12;
+				y++;
+			}
+			
+			return Date(day, m, y);
 		}
 		Date operator+(const Year& x) {
-			return readjustDate(0, 0, x.val);
+			int y = year + x.val;
+			return Date(day, month, y);
 		}
 
 };
