@@ -27,27 +27,29 @@ struct Year {
 };
 class Date {
 private:
-	int day;
-	int month;
-	int year;
+	unsigned int day;
+	unsigned int month;
+	unsigned int year;
 
 	
 	friend std::ostream& operator<<(std::ostream&, const Date&);
 
 	static bool isLeapYear(const int y);
-	static int dayOfMonth(int m, const int y);
+	static int daysInMonth(int m, const int y);
 	static Date adjustedDate(int m, int d, int y);
 	static int normalizeMonth(const int m);
 	static int normalizeDay(const int d, const int dMax);
-	static int monthsToYears(const int m);
+	static int monthRollover(const int m);
 	static int daysInYear(const int y);
+	static void posDayRollover(int& m, int& d, int& y);
+	static void negDayRollover(int& m, int& d, int& y);
 
 
 public:
 	Date() : month(1), day(1), year(1) {}
-	Date(int m, int d, int y) : month(m), day(d), year(y) {
+	Date(unsigned int m, unsigned int d, unsigned int y) : month(m), day(d), year(y) {
 		if (m < 1 || m > 12) throw std::invalid_argument("Months are between 1-12");
-		if (dayOfMonth(m, y) < d) throw std::invalid_argument("Invalid number of days for month");
+		if (daysInMonth(m, y) < d) throw std::invalid_argument("Invalid number of days for month");
 	}
 
 	
@@ -112,7 +114,7 @@ int Date::normalizeDay(const int d, const int dMax) {
 //OUTPUT:
 //PRECONDITION:
 //POSTCONDITION:
-int Date::monthsToYears(const int m) {
+int Date::monthRollover(const int m) {
 	if (m == 0) return -1;
 	if (m == 12) return 0;
 	return (int)floor((float)m / 12);
@@ -121,7 +123,7 @@ int Date::monthsToYears(const int m) {
 //OUTPUT:
 //PRECONDITION:
 //POSTCONDITION:
-int Date::dayOfMonth(int m, const int y) {
+int Date::daysInMonth(int m, const int y) {
 	int monthMax[12] = { 31, isLeapYear(y) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 	m = normalizeMonth(m);
 	return monthMax[m - 1];
@@ -139,8 +141,8 @@ int Date::daysInYear(const int y) {
 //POSTCONDITION:
 Date Date::adjustedDate(int m, int d, int y) {
 	int newMonth = normalizeMonth(m);
-	int newYear = y + monthsToYears(m);
-	int dMax = dayOfMonth(newMonth, newYear);
+	int newYear = y + monthRollover(m);
+	int dMax = daysInMonth(newMonth, newYear);
 	int newDay = normalizeDay(d, dMax);
 
 	m = newMonth;
@@ -169,11 +171,45 @@ Date Date::operator+(const Month& x) {
 	int m = month + x.val;
 	int d = day;
 	int y = year;
-	while (m > 12) {
-		m -= 12;
-		y++;
-	}
 	return adjustedDate(m, d, y);
+}
+//INPUT:
+//OUTPUT:
+//PRECONDITION:
+//POSTCONDITION:
+void Date::posDayRollover(int& m, int& d, int& y){
+	int mMax = daysInMonth(m, y);
+	int dMax = daysInYear(y);
+
+	while (d > dMax) {
+		d -= dMax;
+		y++;
+		dMax = daysInYear(y);
+	}
+	while (d > mMax) {
+		d -= mMax;
+		m++;
+		mMax = daysInMonth(m, y);
+	}
+}
+//INPUT:
+//OUTPUT:
+//PRECONDITION:
+//POSTCONDITION:
+void Date::negDayRollover(int& m, int& d, int& y){
+	int mMax = daysInMonth(m, y);
+	int dMax = daysInYear(y);
+
+	while (d <= -daysInYear(y)) {
+		y--;
+		dMax = daysInYear(y);
+		d += dMax;
+	}
+	while (d <= 0) {
+		m--;
+		mMax = daysInMonth(m, y);
+		d += mMax;
+	}
 }
 //INPUT:
 //OUTPUT:
@@ -183,28 +219,8 @@ Date Date::operator+(const Day& x) {
 	int m = month;
 	int d = day + x.val;
 	int y = year;
-	int mMax = dayOfMonth(m, y);
-	int dMax = daysInYear(y);
-	while (d > dMax) {
-		d -= dMax;
-		y++;
-		dMax = daysInYear(y);
-	}
-	while (d <= -daysInYear(y)) {
-		y--;
-		dMax = daysInYear(y);
-		d += dMax;
-	}
-	while (d > mMax) {
-		d -= mMax;
-		m++;
-		mMax = dayOfMonth(m, y);
-	}
-	while (d <= 0) {
-		m--;
-		mMax = dayOfMonth(m, y);
-		d += mMax;
-	}
+	if(d > 0) posDayRollover(m, d, y);
+	else negDayRollover(m, d, y);
 
 	return adjustedDate(m, d, y);
 }
@@ -254,7 +270,7 @@ bool Date::operator<(const Date& x) {
 //PRECONDITION:
 //POSTCONDITION:
 bool Date::operator>(const Date& x) {
-	return *this < x;
+	return (Date)x < *this;
 }
 //INPUT:
 //OUTPUT:
@@ -425,7 +441,7 @@ int main() {
 	date5.printDate();
 	date5 = date5 + Month(1);   // Add 1 month
 	date5.printDate();
-	date5 = date5 + Day(-29000);    // Add 29 days
+	date5 = date5 + Day(29000);    // Add 29 days
 	date5.printDate();
 	date5 = date5 - Year(4);    // Subtract 4 years
 	date5.printDate();
