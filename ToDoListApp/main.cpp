@@ -1,6 +1,10 @@
 #include <iostream>
 #include <iomanip>
 
+//INPUT:
+//OUTPUT:
+//PRECONDITION:
+//POSTCONDITION:
 int modulus(const int& m, const int& n) {
 	return ((m % n) + n) % n;
 }
@@ -38,7 +42,10 @@ class Date {
 
 	public:
 		Date() : month(1), day(1), year(1){}
-		Date(unsigned int m, unsigned int d, unsigned int y) : month(m), day(d), year(y) {}
+		Date(unsigned int m, unsigned int d, unsigned int y) : month(m), day(d), year(y) {
+			if (m < 1 || m > 12) throw std::invalid_argument("Months are between 1-12");
+			if (dayOfMonth(m, y) < d) throw std::invalid_argument("Invalid number of days for month");
+		}
 		
 		void printDate();
 		
@@ -50,135 +57,136 @@ class Date {
 		Date operator-(const Year&);
 
 };
-	//INPUT:
-	//OUTPUT:
-	//PRECONDITION:
-	//POSTCONDITION:
-	bool Date::isLeapYear(const int y) {
-		return (y % 4 == 0 && y % 100 != 0) || (y % 400 == 0);
-	}
-	//INPUT:
-	//OUTPUT:
-	//PRECONDITION:
-	//POSTCONDITION:
-	int Date::normalizeMonth(const int m) {
-		return (m % 12 != 0) ? modulus(m, 12) : 12;
-	}
-	//INPUT:
-	//OUTPUT:
-	//PRECONDITION:
-	//POSTCONDITION:
-	int Date::normalizeDay(const int d, const int dMax) {
-		return (dMax < d) ? dMax : d;
-	}
-	//INPUT:
-	//OUTPUT:
-	//PRECONDITION:
-	//POSTCONDITION:
-	int Date::monthsToYears(const int m) {
-		if (m == 0) return -1;
-		return (m != 12) ? floor((float)m / 12.0) : 0;
-	}
-	//INPUT:
-	//OUTPUT:
-	//PRECONDITION:
-	//POSTCONDITION:
-	int Date::dayOfMonth(int m, const int y) {
-		int monthMax[12] = { 31, isLeapYear(y) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-		return monthMax[m - 1];
-	}
-	//INPUT:
-	//OUTPUT:
-	//PRECONDITION:
-	//POSTCONDITION:
-	Date Date::adjustedDate(int m, int d, int y) {
-		int newMonth = normalizeMonth(m);
-		int newYear = y + monthsToYears(m);
-		int dMax = dayOfMonth(newMonth, newYear);
-		int newDay = normalizeDay(d, dMax);
+//INPUT:
+//OUTPUT:
+//PRECONDITION:
+//POSTCONDITION:
+bool Date::isLeapYear(const int y) {
+	return (y % 4 == 0 && y % 100 != 0) || (y % 400 == 0);
+}
+//INPUT:
+//OUTPUT:
+//PRECONDITION:
+//POSTCONDITION:
+int Date::normalizeMonth(const int m) {
+	return (m % 12 != 0) ? modulus(m, 12) : 12;
+}
+//INPUT:
+//OUTPUT:
+//PRECONDITION:
+//POSTCONDITION:
+int Date::normalizeDay(const int d, const int dMax) {
+	return (dMax < d) ? dMax : d;
+}
+//INPUT:
+//OUTPUT:
+//PRECONDITION:
+//POSTCONDITION:
+int Date::monthsToYears(const int m) {
+	if (m == 0) return -1;
+	if (m == 12) return 0;
+	return floor((float)m / 12);
+}
+//INPUT:
+//OUTPUT:
+//PRECONDITION:
+//POSTCONDITION:
+int Date::dayOfMonth(int m, const int y) {
+	int monthMax[12] = { 31, isLeapYear(y) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+	return monthMax[m - 1];
+}
+//INPUT:
+//OUTPUT:
+//PRECONDITION:
+//POSTCONDITION:
+Date Date::adjustedDate(int m, int d, int y) {
+	int newMonth = normalizeMonth(m);
+	int newYear = y + monthsToYears(m);
+	int dMax = dayOfMonth(newMonth, newYear);
+	int newDay = normalizeDay(d, dMax);
 
-		m = newMonth;
-		y = newYear;
-		d = newDay;
+	m = newMonth;
+	y = newYear;
+	d = newDay;
 
-		if (newYear <= 0) return Date();
-		return Date(m, d, y);
+	if (newYear <= 0) return Date(1, 1, 1);
+	return Date(m, d, y);
+}
+//INPUT:
+//OUTPUT:
+//PRECONDITION:
+//POSTCONDITION:
+Date Date::operator+(const Month& x) {
+	int m = month + x.val;
+	int d = day;
+	int y = year;
+	while (m > 12) {
+		m -= 12;
+		y++;
 	}
-	//INPUT:
-	//OUTPUT:
-	//PRECONDITION:
-	//POSTCONDITION:
-	Date Date::operator+(const Month& x) {
-		int m = month + x.val;
-		int d = day;
-		int y = year;
-		while (m > 12) {
-			m -= 12;
-			y++;
-		}
-		return adjustedDate(m, d, y);
+	return adjustedDate(m, d, y);
+}
+//INPUT:
+//OUTPUT:
+//PRECONDITION:
+//POSTCONDITION:
+Date Date::operator+(const Day& x) {
+	int m = month;
+	int d = day + x.val;
+	int y = year;
+	int mMax = dayOfMonth(m, y);
+	while (d > mMax) {
+		d -= mMax;
+		m++;
+		mMax = dayOfMonth(m, y);
 	}
-	//INPUT:
-	//OUTPUT:
-	//PRECONDITION:
-	//POSTCONDITION:
-	Date Date::operator+(const Day& x) {
-		int m = month;
-		int d = day + x.val;
-		int y = year;
-		int mMax = dayOfMonth(m, y);
-		while (d > mMax) {
-			d -= mMax;
-			m++;
-			mMax = dayOfMonth(m, y);
-		}
-		while (d <= 0) {
-			m--;
-			mMax = dayOfMonth(m, y);
-			d += mMax;
-		}
-		return adjustedDate(m, d, y);
+	while (d <= 0) {
+		m--;
+		mMax = dayOfMonth(m, y);
+		d += mMax;
 	}
-	//INPUT:
-	//OUTPUT:
-	//PRECONDITION:
-	//POSTCONDITION:
-	Date Date::operator+(const Year& x) {
-		int m = month;
-		int d = day;
-		int y = year + x.val;
-		return adjustedDate(m, d, y);
-	}
-	//INPUT:
-	//OUTPUT:
-	//PRECONDITION:
-	//POSTCONDITION:
-	Date Date::operator-(const Month& x) {
-		return *this + Month(-x.val);
-	};
-	//INPUT:
-	//OUTPUT:
-	//PRECONDITION:
-	//POSTCONDITION:
-	Date Date::operator-(const Day& x) {
-		return *this + Day(-x.val);
-	};
-	//INPUT:
-	//OUTPUT:
-	//PRECONDITION:
-	//POSTCONDITION:
-	Date Date::operator-(const Year& x) {
-		return *this + Year(-x.val);
-	};
-	//INPUT:
-	//OUTPUT:
-	//PRECONDITION:
-	//POSTCONDITION:
-	void Date::printDate() {
-		std::cout << std::setw(2) << std::setfill('0') << month << "-";
-		std::cout << std::setw(2) << std::setfill('0') << day << "-";
-		std::cout << std::setw(4) << std::setfill('0') << year << std::endl;
-	}
+	return adjustedDate(m, d, y);
+}
+//INPUT:
+//OUTPUT:
+//PRECONDITION:
+//POSTCONDITION:
+Date Date::operator+(const Year& x) {
+	int m = month;
+	int d = day;
+	int y = year + x.val;
+	return adjustedDate(m, d, y);
+}
+//INPUT:
+//OUTPUT:
+//PRECONDITION:
+//POSTCONDITION:
+Date Date::operator-(const Month& x) {
+	return *this + Month(-x.val);
+};
+//INPUT:
+//OUTPUT:
+//PRECONDITION:
+//POSTCONDITION:
+Date Date::operator-(const Day& x) {
+	return *this + Day(-x.val);
+};
+//INPUT:
+//OUTPUT:
+//PRECONDITION:
+//POSTCONDITION:
+Date Date::operator-(const Year& x) {
+	return *this + Year(-x.val);
+};
+//INPUT:
+//OUTPUT:
+//PRECONDITION:
+//POSTCONDITION:
+void Date::printDate() {
+	std::cout << std::setw(2) << std::setfill('0') << month << "-";
+	std::cout << std::setw(2) << std::setfill('0') << day << "-";
+	std::cout << std::setw(4) << std::setfill('0') << year << std::endl;
+}
 
 
 int main(){
