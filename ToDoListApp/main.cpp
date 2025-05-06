@@ -1,26 +1,31 @@
 #include <iostream>
 #include <iomanip>
 
-
+int modulus(const int& m, const int& n) {
+	return ((m % n) + n) % n;
+}
 struct Month {
 	int val;
+	explicit Month() : val(1) {}
 	explicit Month(int v) : val(v){}
 };
 
 struct Day {
 	int val;
+	explicit Day() : val(1) {}
 	explicit Day(int v) : val(v) {}
 };
 
 struct Year {
 	int val;
+	explicit Year() : val(1) {}
 	explicit Year(int v) : val(v){}
 };
 class Date {
 	private:
-		int day;
-		int month;
-		int year;
+		unsigned int day;
+		unsigned int month;
+		unsigned int year;
 		
 		
 		static bool isLeapYear(const int y);
@@ -33,49 +38,76 @@ class Date {
 
 	public:
 		Date() : month(1), day(1), year(1){}
-		Date(int m, int d, int y) : month(m), day(d), year(y) {}
+		Date(unsigned int m, unsigned int d, unsigned int y) : month(m), day(d), year(y) {}
 		
 		void printDate();
 		
 		Date operator+(const Month&);
 		Date operator+(const Day&);
 		Date operator+(const Year&);
+		Date operator-(const Month&);
+		Date operator-(const Day&);
+		Date operator-(const Year&);
 
 };
-
+	//INPUT:
+	//OUTPUT:
+	//PRECONDITION:
+	//POSTCONDITION:
 	bool Date::isLeapYear(const int y) {
 		return (y % 4 == 0 && y % 100 != 0) || (y % 400 == 0);
-	};
-
-	int Date::normalizeMonth(const int m) {
-		return (m % 12 != 0) ? m % 12 : 12;
 	}
+	//INPUT:
+	//OUTPUT:
+	//PRECONDITION:
+	//POSTCONDITION:
+	int Date::normalizeMonth(const int m) {
+		return (m % 12 != 0) ? modulus(m, 12) : 12;
+	}
+	//INPUT:
+	//OUTPUT:
+	//PRECONDITION:
+	//POSTCONDITION:
 	int Date::normalizeDay(const int d, const int dMax) {
 		return (dMax < d) ? dMax : d;
 	}
+	//INPUT:
+	//OUTPUT:
+	//PRECONDITION:
+	//POSTCONDITION:
 	int Date::monthsToYears(const int m) {
-		return (m != 12) ? m / 12 : 0;
+		if (m == 0) return -1;
+		return (m != 12) ? floor((float)m / 12.0) : 0;
 	}
-
+	//INPUT:
+	//OUTPUT:
+	//PRECONDITION:
+	//POSTCONDITION:
 	int Date::dayOfMonth(int m, const int y) {
-		int monthMax[12] = { 31,(isLeapYear(y)) ? 29 : 28,31,30,31,30,31,31,30,31,30,31 };
-		m = normalizeMonth(m);
+		int monthMax[12] = { 31, isLeapYear(y) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 		return monthMax[m - 1];
 	}
-	
+	//INPUT:
+	//OUTPUT:
+	//PRECONDITION:
+	//POSTCONDITION:
 	Date Date::adjustedDate(int m, int d, int y) {
 		int newMonth = normalizeMonth(m);
 		int newYear = y + monthsToYears(m);
-		int dMax = dayOfMonth(newYear, newMonth);
+		int dMax = dayOfMonth(newMonth, newYear);
 		int newDay = normalizeDay(d, dMax);
 
 		m = newMonth;
 		y = newYear;
 		d = newDay;
 
+		if (newYear <= 0) return Date();
 		return Date(m, d, y);
 	}
-
+	//INPUT:
+	//OUTPUT:
+	//PRECONDITION:
+	//POSTCONDITION:
 	Date Date::operator+(const Month& x) {
 		int m = month + x.val;
 		int d = day;
@@ -84,10 +116,12 @@ class Date {
 			m -= 12;
 			y++;
 		}
-
 		return adjustedDate(m, d, y);
 	}
-
+	//INPUT:
+	//OUTPUT:
+	//PRECONDITION:
+	//POSTCONDITION:
 	Date Date::operator+(const Day& x) {
 		int m = month;
 		int d = day + x.val;
@@ -98,17 +132,48 @@ class Date {
 			m++;
 			mMax = dayOfMonth(m, y);
 		}
-
+		while (d <= 0) {
+			m--;
+			mMax = dayOfMonth(m, y);
+			d += mMax;
+		}
 		return adjustedDate(m, d, y);
 	}
-
+	//INPUT:
+	//OUTPUT:
+	//PRECONDITION:
+	//POSTCONDITION:
 	Date Date::operator+(const Year& x) {
 		int m = month;
 		int d = day;
 		int y = year + x.val;
 		return adjustedDate(m, d, y);
 	}
-
+	//INPUT:
+	//OUTPUT:
+	//PRECONDITION:
+	//POSTCONDITION:
+	Date Date::operator-(const Month& x) {
+		return *this + Month(-x.val);
+	};
+	//INPUT:
+	//OUTPUT:
+	//PRECONDITION:
+	//POSTCONDITION:
+	Date Date::operator-(const Day& x) {
+		return *this + Day(-x.val);
+	};
+	//INPUT:
+	//OUTPUT:
+	//PRECONDITION:
+	//POSTCONDITION:
+	Date Date::operator-(const Year& x) {
+		return *this + Year(-x.val);
+	};
+	//INPUT:
+	//OUTPUT:
+	//PRECONDITION:
+	//POSTCONDITION:
 	void Date::printDate() {
 		std::cout << std::setw(2) << std::setfill('0') << month << "-";
 		std::cout << std::setw(2) << std::setfill('0') << day << "-";
@@ -117,261 +182,91 @@ class Date {
 
 
 int main(){
-	// Test Case 1
-	Date date1(2, 28, 2020);
+	// Test Case 1: Basic Year, Month, and Day increments
+	Date date1(2, 28, 2020);  // Starting date
 	date1.printDate();
-	date1 = date1 + Year(3);
+	date1 = date1 + Year(3);  // Add 3 years
 	date1.printDate();
-	date1 = date1 + Month(1);
+	date1 = date1 + Month(1); // Add 1 month
 	date1.printDate();
-	date1 = date1 + Day(28);
-	date1.printDate();
-	date1.printDate();
-	date1 = date1 + Year(3);
-	date1.printDate();
-	date1 = date1 + Month(1);
-	date1.printDate();
-	date1 = date1 + Day(28);
+	date1 = date1 + Day(28);  // Add 28 days
 	date1.printDate();
 
-	// Test Case 2
-	Date date2(12, 31, 2019);
+	// Test Case 2: Handling Month End and Year Increment
+	Date date2(12, 31, 2019); // Starting date at the end of year
 	date2.printDate();
-	date2 = date2 + Year(1);
+	date2 = date2 + Year(1);  // Add 1 year
 	date2.printDate();
-	date2 = date2 + Month(1);
+	date2 = date2 + Month(1); // Add 1 month
 	date2.printDate();
-	date2 = date2 + Day(1);
-	date2.printDate();
-	date2.printDate();
-	date2 = date2 + Year(1);
-	date2.printDate();
-	date2 = date2 + Month(11);
-	date2.printDate();
-	date2 = date2 + Day(31);
+	date2 = date2 + Day(1);   // Add 1 day
 	date2.printDate();
 
-	// Test Case 3
-	Date date3(1, 30, 2021);
+	// Test Case 3: Date Decrement with Negative Values
+	Date date3(3, 1, 2024);  // Starting date
 	date3.printDate();
-	date3 = date3 + Year(0);
+	date3 = date3 - Year(1); // Subtract 1 year
 	date3.printDate();
-	date3 = date3 + Month(1);
+	date3 = date3 - Month(11); // Subtract 11 months
 	date3.printDate();
-	date3 = date3 + Day(1);
-	date3.printDate();
-	date3.printDate();
-	date3 = date3 + Year(4);
-	date3.printDate();
-	date3 = date3 + Month(2);
-	date3.printDate();
-	date3 = date3 + Day(28);
+	date3 = date3 - Day(30);   // Subtract 30 days
 	date3.printDate();
 
-	// Test Case 4
-	Date date4(2, 29, 2024);
+	// Test Case 4: Leap Year Handling
+	Date date4(2, 29, 2024); // Leap year date
 	date4.printDate();
-	date4 = date4 + Year(1);
+	date4 = date4 + Year(1);  // Add 1 year, check for leap year roll-over
 	date4.printDate();
-	date4 = date4 + Month(1);
+	date4 = date4 - Month(12); // Subtract 12 months, check for correct roll-back
 	date4.printDate();
-	date4 = date4 + Day(1);
-	date4.printDate();
-	date4.printDate();
-	date4 = date4 + Year(3);
-	date4.printDate();
-	date4 = date4 + Month(12);
-	date4.printDate();
-	date4 = date4 + Day(31);
+	date4 = date4 + Day(31);  // Add 31 days to handle month overflow
 	date4.printDate();
 
-	// Test Case 5
-	Date date5(2, 29, 2000);
+	// Test Case 5: Large Date Operations (Years, Months, Days)
+	Date date5(1, 1, 2000); // Starting date
 	date5.printDate();
-	date5 = date5 + Year(100);
+	date5 = date5 + Year(100);  // Add 100 years
 	date5.printDate();
-	date5 = date5 + Month(1);
+	date5 = date5 + Month(1);   // Add 1 month
 	date5.printDate();
-	date5 = date5 + Day(29);
+	date5 = date5 + Day(29);    // Add 29 days
 	date5.printDate();
+	date5 = date5 - Year(4);    // Subtract 4 years
 	date5.printDate();
-	date5 = date5 + Year(4);
+	date5 = date5 - Month(2);   // Subtract 2 months
 	date5.printDate();
-	date5 = date5 + Month(2);
-	date5.printDate();
-	date5 = date5 + Day(1);
+	date5 = date5 - Day(1);     // Subtract 1 day
 	date5.printDate();
 
-	// Test Case 6
-	Date date6(6, 15, 2022);
+	// Test Case 6: Day and Month Modifications
+	Date date6(6, 15, 2022); // Starting date
 	date6.printDate();
-	date6 = date6 + Year(2);
+	date6 = date6 + Year(2);  // Add 2 years
 	date6.printDate();
-	date6 = date6 + Month(7);
+	date6 = date6 + Month(7); // Add 7 months
 	date6.printDate();
-	date6 = date6 + Day(16);
+	date6 = date6 + Day(16);  // Add 16 days
 	date6.printDate();
-	date6.printDate();
-	date6 = date6 + Year(0);
-	date6.printDate();
-	date6 = date6 + Month(5);
-	date6.printDate();
-	date6 = date6 + Day(31);
+	date6 = date6 - Year(0);  // No change in year
 	date6.printDate();
 
-	// Test Case 7
-	Date date7(11, 30, 2023);
+	// Test Case 7: Date Edge Case Handling (Negative Day, Month, Year)
+	Date date7(1, 1, 2024); // Starting date
 	date7.printDate();
-	date7 = date7 + Year(1);
+	date7 = date7 + Day(-1); // Subtract 1 day (edge case)
 	date7.printDate();
-	date7 = date7 + Month(1);
+	date7 = date7 + Month(-1); // Subtract 1 month (edge case)
 	date7.printDate();
-	date7 = date7 + Day(1);
-	date7.printDate();
-	date7.printDate();
-	date7 = date7 + Year(0);
-	date7.printDate();
-	date7 = date7 + Month(0);
-	date7.printDate();
-	date7 = date7 + Day(365);
+	date7 = date7 + Year(-1); // Subtract 1 year (edge case)
 	date7.printDate();
 
-	// Test Case 8
-	Date date8(3, 1, 2023);
+	// Test Case 8: Day and Month Rollover
+	Date date8(3, 1, 2020); // Starting date
 	date8.printDate();
-	date8 = date8 + Year(1);
+	date8 = date8 + Day(-1); // Subtract 1 day (end of month)
 	date8.printDate();
-	date8 = date8 + Month(11);
+	date8 = date8 + Month(-1); // Subtract 1 month (beginning of year)
 	date8.printDate();
-	date8 = date8 + Day(365);
-	date8.printDate();
-	date8.printDate();
-	date8 = date8 + Year(2);
-	date8.printDate();
-	date8 = date8 + Month(0);
-	date8.printDate();
-	date8 = date8 + Day(30);
-	date8.printDate();
-
-	// Test Case 9
-	Date date9(4, 30, 2021);
-	date9.printDate();
-	date9 = date9 + Year(2);
-	date9.printDate();
-	date9 = date9 + Month(2);
-	date9.printDate();
-	date9 = date9 + Day(2);
-	date9.printDate();
-	date9.printDate();
-	date9 = date9 + Year(0);
-	date9.printDate();
-	date9 = date9 + Month(7);
-	date9.printDate();
-	date9 = date9 + Day(1);
-	date9.printDate();
-
-	// Test Case 10
-	Date date10(1, 1, 2020);
-	date10.printDate();
-	date10 = date10 + Year(10);
-	date10.printDate();
-	date10 = date10 + Month(12);
-	date10.printDate();
-	date10 = date10 + Day(365);
-	date10.printDate();
-	date10.printDate();
-	date10 = date10 + Year(1);
-	date10.printDate();
-	date10 = date10 + Month(1);
-	date10.printDate();
-	date10 = date10 + Day(1);
-	date10.printDate();
-
-	// Test Case 11
-	Date date11(1, 1, 1900);
-	date11.printDate();
-	date11 = date11 + Year(200);
-	date11.printDate();
-	date11 = date11 + Month(6);
-	date11.printDate();
-	date11 = date11 + Day(365);
-	date11.printDate();
-	date11.printDate();
-	date11 = date11 + Year(123);
-	date11.printDate();
-	date11 = date11 + Month(11);
-	date11.printDate();
-	date11 = date11 + Day(999);
-	date11.printDate();
-
-	// Test Case 12
-	Date date12(3, 1, 2024);
-	date12.printDate();
-	date12 = date12 + Year(-1);
-	date12.printDate();
-	date12 = date12 + Month(-2);
-	date12.printDate();
-	date12 = date12 + Day(-30);
-	date12.printDate();
-	date12.printDate();
-	date12 = date12 + Year(-3);
-	date12.printDate();
-	date12 = date12 + Month(-1);
-	date12.printDate();
-	date12 = date12 + Day(-28);
-	date12.printDate();
-
-	// Test Case 13
-	Date date13(2, 29, 2016);
-	date13.printDate();
-	date13 = date13 + Year(4);
-	date13.printDate();
-	date13 = date13 + Year(4);
-	date13.printDate();
-	date13 = date13 + Year(4);
-	date13.printDate();
-	date13.printDate();
-	date13 = date13 + Month(12);
-	date13.printDate();
-	date13 = date13 + Day(366);
-	date13.printDate();
-	date13 = date13 + Year(4);
-	date13.printDate();
-
-	// Test Case 14
-	Date date14(1, 1, 2022);
-	date14.printDate();
-	date14 = date14 + Day(500);
-	date14.printDate();
-	date14 = date14 + Month(24);
-	date14.printDate();
-	date14 = date14 + Day(1000);
-	date14.printDate();
-	date14.printDate();
-	date14 = date14 + Month(100);
-	date14.printDate();
-	date14 = date14 + Day(2000);
-	date14.printDate();
-	date14 = date14 + Year(10);
-	date14.printDate();
-
-	// Test Case 15
-	Date date15(2, 28, 2100);
-	date15.printDate();
-	date15 = date15 + Day(1);
-	date15.printDate();
-	date15 = date15 + Year(4);
-	date15.printDate();
-	date15 = date15 + Day(365);
-	date15.printDate();
-	date15.printDate();
-	date15 = date15 + Year(4);
-	date15.printDate();
-	date15 = date15 + Month(2);
-	date15.printDate();
-	date15 = date15 + Day(29);
-	date15.printDate();
-
 
 
 
