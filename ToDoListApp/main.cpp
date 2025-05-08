@@ -36,13 +36,13 @@ private:
 
 	static bool isLeapYear(const int y);
 	static int daysInMonth(int m, const int y);
-	static Date adjustedDate(int m, int d, int y);
+	static void adjustMY(int& m, int& d, int& y);
 	static int normalizeMonth(const int m);
 	static int normalizeDay(const int d, const int dMax);
 	static int monthRollover(const int m);
 	static int daysInYear(const int y);
-	static void dayRolloverY(int& d, int& y);
-	static void dayRolloverM(int& m, int& d, int y);
+	static void adjustDY(int& d, int& y);
+	static void adjustDM(int& m, int& d, int y);
 
 
 public:
@@ -139,7 +139,7 @@ int Date::daysInYear(const int y) {
 //OUTPUT:
 //PRECONDITION:
 //POSTCONDITION:
-Date Date::adjustedDate(int m, int d, int y) {
+void Date::adjustMY(int& m, int& d, int& y) {
 	int newMonth = normalizeMonth(m);
 	int newYear = y + monthRollover(m);
 	int dMax = daysInMonth(newMonth, newYear);
@@ -149,8 +149,9 @@ Date Date::adjustedDate(int m, int d, int y) {
 	y = newYear;
 	d = newDay;
 
-	if (newYear <= 0) return Date(1, 1, 1);
-	return Date(m, d, y);
+	if (newYear <= 0) {
+		m = 1, d = 1, y = 1;
+	}
 }
 //INPUT:
 //OUTPUT:
@@ -171,13 +172,16 @@ Date Date::operator+(const Month& x) {
 	int m = month + x.val;
 	int d = day;
 	int y = year;
-	return adjustedDate(m, d, y);
+
+	adjustMY(m, d, y);
+
+	return Date(m, d, y);
 }
 //INPUT:
 //OUTPUT:
 //PRECONDITION:
 //POSTCONDITION:
-void Date::dayRolloverY(int& d, int& y){
+void Date::adjustDY(int& d, int& y){
 	int dMax = daysInYear(y);
 
 	while (d > dMax) {
@@ -196,7 +200,7 @@ void Date::dayRolloverY(int& d, int& y){
 //OUTPUT:
 //PRECONDITION:
 //POSTCONDITION:
-void Date::dayRolloverM(int& m, int& d, int y){
+void Date::adjustDM(int& m, int& d, int y){
 	int mMax = daysInMonth(m, y);
 	while (d > mMax) {
 		d -= mMax;
@@ -218,11 +222,12 @@ Date Date::operator+(const Day& x) {
 	int d = day + x.val;
 	int y = year;
 	
-	dayRolloverY(d,y);
-	dayRolloverM(m, d, y);
+	adjustDY(d,y);
+	adjustDM(m, d, y);
+	adjustMY(m, d, y);
 	
 
-	return adjustedDate(m, d, y);
+	return Date(m, d, y);
 }
 //INPUT:
 //OUTPUT:
@@ -232,7 +237,10 @@ Date Date::operator+(const Year& x) {
 	int m = month;
 	int d = day;
 	int y = year + x.val;
-	return adjustedDate(m, d, y);
+
+	adjustMY(m, d, y);
+
+	return Date(m, d, y);
 }
 //INPUT:
 //OUTPUT:
