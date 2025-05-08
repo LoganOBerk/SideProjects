@@ -41,8 +41,8 @@ private:
 	static int normalizeDay(const int d, const int dMax);
 	static int monthRollover(const int m);
 	static int daysInYear(const int y);
-	static void posDayRollover(int& m, int& d, int& y);
-	static void negDayRollover(int& m, int& d, int& y);
+	static void dayRolloverY(int& d, int& y);
+	static void dayRolloverM(int& m, int& d, int y);
 
 
 public:
@@ -177,8 +177,7 @@ Date Date::operator+(const Month& x) {
 //OUTPUT:
 //PRECONDITION:
 //POSTCONDITION:
-void Date::posDayRollover(int& m, int& d, int& y){
-	int mMax = daysInMonth(m, y);
+void Date::dayRolloverY(int& d, int& y){
 	int dMax = daysInYear(y);
 
 	while (d > dMax) {
@@ -186,24 +185,23 @@ void Date::posDayRollover(int& m, int& d, int& y){
 		y++;
 		dMax = daysInYear(y);
 	}
-	while (d > mMax) {
-		d -= mMax;
-		m++;
-		mMax = daysInMonth(m, y);
+	
+	while (d <= -daysInYear(y)) {
+		y--;
+		dMax = daysInYear(y);
+		d += dMax;
 	}
 }
 //INPUT:
 //OUTPUT:
 //PRECONDITION:
 //POSTCONDITION:
-void Date::negDayRollover(int& m, int& d, int& y){
+void Date::dayRolloverM(int& m, int& d, int y){
 	int mMax = daysInMonth(m, y);
-	int dMax = daysInYear(y);
-
-	while (d <= -daysInYear(y)) {
-		y--;
-		dMax = daysInYear(y);
-		d += dMax;
+	while (d > mMax) {
+		d -= mMax;
+		m++;
+		mMax = daysInMonth(m, y);
 	}
 	while (d <= 0) {
 		m--;
@@ -219,8 +217,10 @@ Date Date::operator+(const Day& x) {
 	int m = month;
 	int d = day + x.val;
 	int y = year;
-	if(d > 0) posDayRollover(m, d, y);
-	else negDayRollover(m, d, y);
+	
+	dayRolloverY(d,y);
+	dayRolloverM(m, d, y);
+	
 
 	return adjustedDate(m, d, y);
 }
