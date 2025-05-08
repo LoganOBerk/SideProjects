@@ -27,16 +27,16 @@ struct Year {
 };
 class Date {
 private:
-	unsigned int day;
-	unsigned int month;
-	unsigned int year;
+	int day;
+	int month;
+	int year;
 
 	
 	friend std::ostream& operator<<(std::ostream&, const Date&);
 
 	static bool isLeapYear(const int y);
 	static int daysInMonth(int m, const int y);
-	static void adjustMY(int& m, int& d, int& y);
+	static void adjustMDY(int& m, int& d, int& y);
 	static int normalizeMonth(const int m);
 	static int normalizeDay(const int d, const int dMax);
 	static int monthRollover(const int m);
@@ -47,7 +47,8 @@ private:
 
 public:
 	Date() : month(1), day(1), year(1) {}
-	Date(unsigned int m, unsigned int d, unsigned int y) : month(m), day(d), year(y) {
+	Date(int m, int d, int y) : month(m), day(d), year(y) {
+		if (y < 1) { m = 1, d = 1, y = 1;}
 		if (m < 1 || m > 12) throw std::invalid_argument("Months are between 1-12");
 		if (daysInMonth(m, y) < d) throw std::invalid_argument("Invalid number of days for month");
 	}
@@ -139,19 +140,10 @@ int Date::daysInYear(const int y) {
 //OUTPUT:
 //PRECONDITION:
 //POSTCONDITION:
-void Date::adjustMY(int& m, int& d, int& y) {
-	int newMonth = normalizeMonth(m);
-	int newYear = y + monthRollover(m);
-	int dMax = daysInMonth(newMonth, newYear);
-	int newDay = normalizeDay(d, dMax);
-
-	m = newMonth;
-	y = newYear;
-	d = newDay;
-
-	if (newYear <= 0) {
-		m = 1, d = 1, y = 1;
-	}
+void Date::adjustMDY(int& m, int& d, int& y) {
+	y += monthRollover(m);
+	m = normalizeMonth(m);
+	d = normalizeDay(d, daysInMonth(m, y));
 }
 //INPUT:
 //OUTPUT:
@@ -173,7 +165,7 @@ Date Date::operator+(const Month& x) {
 	int d = day;
 	int y = year;
 
-	adjustMY(m, d, y);
+	adjustMDY(m, d, y);
 
 	return Date(m, d, y);
 }
@@ -190,7 +182,7 @@ void Date::adjustDY(int& d, int& y){
 		dMax = daysInYear(y);
 	}
 	
-	while (d <= -daysInYear(y)) {
+	while (d <= -dMax) {
 		y--;
 		dMax = daysInYear(y);
 		d += dMax;
@@ -222,9 +214,9 @@ Date Date::operator+(const Day& x) {
 	int d = day + x.val;
 	int y = year;
 	
-	adjustDY(d,y);
+	adjustDY(d, y);
 	adjustDM(m, d, y);
-	adjustMY(m, d, y);
+	adjustMDY(m, d, y);
 	
 
 	return Date(m, d, y);
@@ -237,8 +229,8 @@ Date Date::operator+(const Year& x) {
 	int m = month;
 	int d = day;
 	int y = year + x.val;
-
-	adjustMY(m, d, y);
+	
+	adjustMDY(m, d, y);
 
 	return Date(m, d, y);
 }
@@ -388,7 +380,7 @@ Date Date::operator--(int) {
 	return cur;
 }
 std::ostream& operator<<(std::ostream& os, const Date& x) {
-	std::string monthName[12] = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "Novemeber", "December"};
+	std::string monthName[12] = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 	os << monthName[x.month - 1] << ' ';
 	os << std::setw(2) << std::setfill('0') << x.day << ", ";
 	os << std::setw(4) << std::setfill('0') << x.year;
