@@ -26,116 +26,163 @@ struct Year {
 	explicit Year(int v) : val(v) {}
 };
 class Date {
-private:
+protected:
 	int day;
 	int month;
 	int year;
 
 	
-	friend std::ostream& operator<<(std::ostream&, const Date&);
+	virtual friend std::ostream& operator<<(std::ostream&, const Date&);
 
-	static bool isLeapYear(const int y);
-	static int daysInMonth(int m, const int y);
-	static void adjustMDY(int& m, int& d, int& y);
-	static int normalizeMonth(const int m);
-	static int normalizeDay(const int d, const int dMax);
-	static int monthRollover(const int m);
-	static int daysInYear(const int y);
-	static void adjustDY(int& d, int& y);
-	static void adjustDM(int& m, int& d, int y);
+	virtual bool isLeapYear(const int y);
+	virtual int normalizeDay(const int d, const int dMax);
+	virtual int normalizeMonth(const int m);
+	virtual int daysInMonth(const int m, const int y);
+	virtual int daysInYear(const int y);
+	virtual int monthRollover(const int m);
+	
+	virtual void adjustDY(int& d, int& y);
+	virtual void adjustDM(int& m, int& d, const int y);
+	virtual void adjustMDY(int& m, int& d, int& y);
+
 
 
 public:
 	Date() : month(1), day(1), year(1) {}
 	Date(int m, int d, int y) : month(m), day(d), year(y) {
-		if (y < 1) { m = 1, d = 1, y = 1;}
+		if (y < 1) { month = 1, day = 1, year = 1;}
 		if (m < 1 || m > 12) throw std::invalid_argument("Months are between 1-12");
 		if (daysInMonth(m, y) < d) throw std::invalid_argument("Invalid number of days for month");
 	}
 
+	virtual void printDate();
+
+	virtual bool operator<(const Date&);
+	virtual bool operator>(const Date&);
+	virtual bool operator==(const Date&);
+	virtual bool operator<=(const Date&);
+	virtual bool operator>=(const Date&);
+
+	virtual Date& operator=(const Date&);
 	
-	bool operator<=(const Date&);
-	bool operator>=(const Date&);
-	bool operator<(const Date&);
-	bool operator>(const Date&);
-	bool operator==(const Date&);
+	virtual Date operator+(const Month&);
+	virtual Date operator-(const Month&);
+	virtual Date& operator+=(const Month&);
+	virtual Date& operator-=(const Month&);
 
-	Date operator+(const Month&);
-	Date operator-(const Month&);
-
-	Date operator+(const Day&);
-	Date operator-(const Day&);
-
-
-	Date operator+(const Year&);
-	Date operator-(const Year&);
-
-	Date& operator=(const Date&);
-	Date& operator++();
-	Date& operator--();
-	Date operator++(int);
-	Date operator--(int);
-
-	Date& operator+=(const Month&);
-	Date& operator-=(const Month&);
-
-	Date& operator+=(const Day&);
-	Date& operator-=(const Day&);
-
-	Date& operator+=(const Year&);
-	Date& operator-=(const Year&);
-
+	virtual Date operator+(const Day&);
+	virtual Date operator-(const Day&);
+	virtual Date& operator+=(const Day&);
+	virtual Date& operator-=(const Day&);
 	
+	virtual Date operator+(const Year&);
+	virtual Date operator-(const Year&);
+	virtual Date& operator+=(const Year&);
+	virtual Date& operator-=(const Year&);
 
-	void printDate();
+	virtual Date& operator++();
+	virtual Date& operator--();
+	virtual Date operator++(int);
+	virtual Date operator--(int);
+	
+	
 
 };
-//INPUT:
-//OUTPUT:
-//PRECONDITION:
-//POSTCONDITION:
+
+//INPUT: y, a year
+//OUTPUT: true or false
+//PRECONDITION: none
+//POSTCONDITION: returns true if the given year is valid and a leap year
 bool Date::isLeapYear(const int y) {
+	if (y < 1) return false;
 	return (y % 4 == 0 && y % 100 != 0) || (y % 400 == 0);
 }
-//INPUT:
-//OUTPUT:
-//PRECONDITION:
-//POSTCONDITION:
+
+//INPUT:d a given day, mMax maximum days in the month
+//OUTPUT: the proper number of days in the month
+//PRECONDITION: day is properly set for last year
+//POSTCONDITION: day is properly set for current year
+int Date::normalizeDay(const int d, const int mMax) {
+	return (mMax < d) ? mMax : d;
+}
+
+//INPUT: m, a number of months 
+//OUTPUT: the month number (1-12)
+//PRECONDITION: the amount of months to add/subtract was 
+// properly added or subtracted to/from the previous month
+//POSTCONDITION: the month is normalized to its proper number (1 - 12)
 int Date::normalizeMonth(const int m) {
 	return (m % 12 != 0) ? modulus(m, 12) : 12;
 }
-//INPUT:
-//OUTPUT:
-//PRECONDITION:
-//POSTCONDITION:
-int Date::normalizeDay(const int d, const int dMax) {
-	return (dMax < d) ? dMax : d;
-}
-//INPUT:
-//OUTPUT:
-//PRECONDITION:
-//POSTCONDITION:
+
+//INPUT: m, a number of months 
+//OUTPUT: the amount of months to roll forward or backward
+//PRECONDITION: the amount of months to add/subtract was 
+// properly added or subtracted to/from the previous month
+//POSTCONDITION: the proper amount of months to roll back or forward is set
 int Date::monthRollover(const int m) {
 	if (m == 0) return -1;
 	if (m == 12) return 0;
 	return (int)floor((float)m / 12);
 }
-//INPUT:
-//OUTPUT:
-//PRECONDITION:
-//POSTCONDITION:
-int Date::daysInMonth(int m, const int y) {
+
+//INPUT: m, a month; y, a year
+//OUTPUT: the maximum amount of days in a given month & year
+//PRECONDITION: the amount of months is set properly (even if overflow or underflow)
+//POSTCONDITION: the maximum amount of days in the given month and year
+int Date::daysInMonth(const int m, const int y) {
 	int monthMax[12] = { 31, isLeapYear(y) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-	m = normalizeMonth(m);
-	return monthMax[m - 1];
+	return monthMax[normalizeMonth(m) - 1];
 }
-//INPUT:
-//OUTPUT:
-//PRECONDITION:
-//POSTCONDITION:
+
+//INPUT: y, a year
+//OUTPUT: days in the year
+//PRECONDITION: year is properly set
+//POSTCONDITION: maximum days in the current year is set 
 int Date::daysInYear(const int y) {
 	return isLeapYear(y) ? 366 : 365;
 }
+
+//INPUT: d, day, y year
+//OUTPUT: none
+//PRECONDITION: days are properly added/subtracted from the previous day 
+//POSTCONDITION: number of whole year days is added or subtracted from d,
+// also adding or subtracting from the current year. Day is set to a number
+// of days less than the updated years maximum or greater than the updated years minimum 
+void Date::adjustDY(int& d, int& y) {
+	int dMax = daysInYear(y);
+
+	while (d > dMax) {
+		d -= dMax;
+		y++;
+		dMax = daysInYear(y);
+	}
+
+	while (d <= -dMax) {
+		y--;
+		dMax = daysInYear(y);
+		d += dMax;
+	}
+}
+
+//INPUT: 
+//OUTPUT:
+//PRECONDITION:
+//POSTCONDITION:
+void Date::adjustDM(int& m, int& d, const int y) {
+	int mMax = daysInMonth(m, y);
+	while (d > mMax) {
+		d -= mMax;
+		m++;
+		mMax = daysInMonth(m, y);
+	}
+	while (d <= 0) {
+		m--;
+		mMax = daysInMonth(m, y);
+		d += mMax;
+	}
+}
+
 //INPUT:
 //OUTPUT:
 //PRECONDITION:
@@ -145,16 +192,23 @@ void Date::adjustMDY(int& m, int& d, int& y) {
 	m = normalizeMonth(m);
 	d = normalizeDay(d, daysInMonth(m, y));
 }
+
 //INPUT:
 //OUTPUT:
 //PRECONDITION:
 //POSTCONDITION:
-Date& Date::operator=(const Date& x) {
-	month = x.month;
-	day = x.day;
-	year = x.year;
-	return *this;
-};
+Date Date::operator+(const Day& x) {
+	int m = month;
+	int d = day + x.val;
+	int y = year;
+
+	adjustDY(d, y);
+	adjustDM(m, d, y);
+	adjustMDY(m, d, y);
+
+
+	return Date(m, d, y);
+}
 
 //INPUT:
 //OUTPUT:
@@ -169,58 +223,7 @@ Date Date::operator+(const Month& x) {
 
 	return Date(m, d, y);
 }
-//INPUT:
-//OUTPUT:
-//PRECONDITION:
-//POSTCONDITION:
-void Date::adjustDY(int& d, int& y){
-	int dMax = daysInYear(y);
 
-	while (d > dMax) {
-		d -= dMax;
-		y++;
-		dMax = daysInYear(y);
-	}
-	
-	while (d <= -dMax) {
-		y--;
-		dMax = daysInYear(y);
-		d += dMax;
-	}
-}
-//INPUT:
-//OUTPUT:
-//PRECONDITION:
-//POSTCONDITION:
-void Date::adjustDM(int& m, int& d, int y){
-	int mMax = daysInMonth(m, y);
-	while (d > mMax) {
-		d -= mMax;
-		m++;
-		mMax = daysInMonth(m, y);
-	}
-	while (d <= 0) {
-		m--;
-		mMax = daysInMonth(m, y);
-		d += mMax;
-	}
-}
-//INPUT:
-//OUTPUT:
-//PRECONDITION:
-//POSTCONDITION:
-Date Date::operator+(const Day& x) {
-	int m = month;
-	int d = day + x.val;
-	int y = year;
-	
-	adjustDY(d, y);
-	adjustDM(m, d, y);
-	adjustMDY(m, d, y);
-	
-
-	return Date(m, d, y);
-}
 //INPUT:
 //OUTPUT:
 //PRECONDITION:
@@ -229,63 +232,47 @@ Date Date::operator+(const Year& x) {
 	int m = month;
 	int d = day;
 	int y = year + x.val;
-	
+
 	adjustMDY(m, d, y);
 
 	return Date(m, d, y);
 }
+
+//INPUT:
+//OUTPUT:
+//PRECONDITION:
+//POSTCONDITION:
+Date& Date::operator=(const Date& x) {
+	month = x.month;
+	day = x.day;
+	year = x.year;
+	return *this;
+}
+
 //INPUT:
 //OUTPUT:
 //PRECONDITION:
 //POSTCONDITION:
 Date Date::operator-(const Month& x) {
 	return *this + Month(-x.val);
-};
+}
+
 //INPUT:
 //OUTPUT:
 //PRECONDITION:
 //POSTCONDITION:
 Date Date::operator-(const Day& x) {
 	return *this + Day(-x.val);
-};
+}
+
 //INPUT:
 //OUTPUT:
 //PRECONDITION:
 //POSTCONDITION:
 Date Date::operator-(const Year& x) {
 	return *this + Year(-x.val);
-};
-//INPUT:
-//OUTPUT:
-//PRECONDITION:
-//POSTCONDITION:
-bool Date::operator<(const Date& x) {
-	if (year != x.year) return year < x.year;
-	if (month != x.month) return month < x.month;
-	if (day != x.day) return day < x.day;
-	return false;
 }
-//INPUT:
-//OUTPUT:
-//PRECONDITION:
-//POSTCONDITION:
-bool Date::operator>(const Date& x) {
-	return (Date)x < *this;
-}
-//INPUT:
-//OUTPUT:
-//PRECONDITION:
-//POSTCONDITION:
-bool Date::operator<=(const Date& x) {
-	return *this < x || *this == x;
-}
-//INPUT:
-//OUTPUT:
-//PRECONDITION:
-//POSTCONDITION:
-bool Date::operator>=(const Date& x) {
-	return *this > x || *this == x;
-}
+
 //INPUT:
 //OUTPUT:
 //PRECONDITION:
@@ -297,6 +284,42 @@ bool Date::operator==(const Date& x) {
 
 	return yearsAreEqual && monthsAreEqual && daysAreEqual;
 }
+
+//INPUT:
+//OUTPUT:
+//PRECONDITION:
+//POSTCONDITION:
+bool Date::operator<(const Date& x) {
+	if (year != x.year) return year < x.year;
+	if (month != x.month) return month < x.month;
+	if (day != x.day) return day < x.day;
+	return false;
+}
+
+//INPUT:
+//OUTPUT:
+//PRECONDITION:
+//POSTCONDITION:
+bool Date::operator>(const Date& x) {
+	return (Date)x < *this;
+}
+
+//INPUT:
+//OUTPUT:
+//PRECONDITION:
+//POSTCONDITION:
+bool Date::operator<=(const Date& x) {
+	return *this < x || *this == x;
+}
+
+//INPUT:
+//OUTPUT:
+//PRECONDITION:
+//POSTCONDITION:
+bool Date::operator>=(const Date& x) {
+	return *this > x || *this == x;
+}
+
 //INPUT:
 //OUTPUT:
 //PRECONDITION:
@@ -305,6 +328,7 @@ Date& Date::operator+=(const Month& x) {
 	*this = *this + x;
 	return *this;
 }
+
 //INPUT:
 //OUTPUT:
 //PRECONDITION:
@@ -313,6 +337,7 @@ Date& Date::operator+=(const Day& x) {
 	*this = *this + x;
 	return *this;
 }
+
 //INPUT:
 //OUTPUT:
 //PRECONDITION:
@@ -321,6 +346,7 @@ Date& Date::operator+=(const Year& x) {
 	*this = *this + x;
 	return *this;
 }
+
 //INPUT:
 //OUTPUT:
 //PRECONDITION:
@@ -329,6 +355,7 @@ Date& Date::operator-=(const Month& x) {
 	*this = *this - x;
 	return *this;
 }
+
 //INPUT:
 //OUTPUT:
 //PRECONDITION:
@@ -337,6 +364,7 @@ Date& Date::operator-=(const Day& x) {
 	*this = *this - x;
 	return *this;
 }
+
 //INPUT:
 //OUTPUT:
 //PRECONDITION:
@@ -345,40 +373,45 @@ Date& Date::operator-=(const Year& x) {
 	*this = *this - x;
 	return *this;
 }
+
 //INPUT:
 //OUTPUT:
 //PRECONDITION:
 //POSTCONDITION:
 Date& Date::operator++() {
-	*this = *this + Day();
+	*this += Day(1);
 	return *this;
 }
+
 //INPUT:
 //OUTPUT:
 //PRECONDITION:
 //POSTCONDITION:
 Date Date::operator++(int) {
 	Date cur = *this;
-	*this = *this + Day();
+	*this += Day(1);
 	return cur;
 }
+
 //INPUT:
 //OUTPUT:
 //PRECONDITION:
 //POSTCONDITION:
 Date& Date::operator--() {
-	*this = *this - Day();
+	*this -= Day(1);
 	return *this;
 }
+
 //INPUT:
 //OUTPUT:
 //PRECONDITION:
 //POSTCONDITION:
 Date Date::operator--(int) {
 	Date cur = *this;
-	*this = *this - Day();
+	*this -= Day(1);
 	return cur;
 }
+
 std::ostream& operator<<(std::ostream& os, const Date& x) {
 	std::string monthName[12] = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 	os << monthName[x.month - 1] << ' ';
