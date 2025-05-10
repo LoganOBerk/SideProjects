@@ -32,7 +32,7 @@ protected:
 	int year;
 
 	
-	virtual friend std::ostream& operator<<(std::ostream&, const Date&);
+	friend std::ostream& operator<<(std::ostream&, const Date&);
 
 	virtual bool isLeapYear(const int y);
 	virtual int normalizeDay(const int d, const int dMax);
