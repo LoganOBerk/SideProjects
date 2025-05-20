@@ -204,8 +204,6 @@ void Date::adjustMDY(int& m, int& d, int& y) {
 	y += monthRollover(m);
 	m = normalizeMonth(m);
 	d = normalizeDay(d, daysInMonth(m, y));
-
-	
 }
 
 //INPUT: x, a Day object
@@ -221,8 +219,6 @@ Date Date::operator+(const Day& x) {
 	adjustDM(m, d, y);
 	adjustMDY(m, d, y);
 
-	
-	
 	return Date(m, d, y);
 }
 
@@ -327,42 +323,36 @@ bool Date::operator>=(const Date& x) {
 	return *this > x || *this == x;
 }
 
-// All compound assignment operators reuse the logic of corresponding binary operators
 //INPUT/OUTPUT/PRE/POST: as described in binary operator equivalents
 Date& Date::operator+=(const Month& x) {
 	*this = *this + x;
 	return *this;
 }
 
-// All compound assignment operators reuse the logic of corresponding binary operators
 //INPUT/OUTPUT/PRE/POST: as described in binary operator equivalents
 Date& Date::operator+=(const Day& x) {
 	*this = *this + x;
 	return *this;
 }
 
-// All compound assignment operators reuse the logic of corresponding binary operators
 //INPUT/OUTPUT/PRE/POST: as described in binary operator equivalents
 Date& Date::operator+=(const Year& x) {
 	*this = *this + x;
 	return *this;
 }
 
-// All compound assignment operators reuse the logic of corresponding binary operators
 //INPUT/OUTPUT/PRE/POST: as described in binary operator equivalents
 Date& Date::operator-=(const Month& x) {
 	*this = *this - x;
 	return *this;
 }
 
-// All compound assignment operators reuse the logic of corresponding binary operators
 //INPUT/OUTPUT/PRE/POST: as described in binary operator equivalents
 Date& Date::operator-=(const Day& x) {
 	*this = *this - x;
 	return *this;
 }
 
-// All compound assignment operators reuse the logic of corresponding binary operators
 //INPUT/OUTPUT/PRE/POST: as described in binary operator equivalents
 Date& Date::operator-=(const Year& x) {
 	*this = *this - x;
