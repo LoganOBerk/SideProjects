@@ -230,7 +230,7 @@ bool Date::operator<(const Date& x) {
 //OUTPUT: true or false
 //PRECONDITION: both Dates are valid
 //POSTCONDITION: returns true if this Date is greater than x
-bool Date::operator>(const Date& x) {
+bool Date::operator>(const Date& x){
 	return (Date)x < *this;
 }
 

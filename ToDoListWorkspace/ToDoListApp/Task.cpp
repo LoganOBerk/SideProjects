@@ -1,4 +1,6 @@
 #include <string>
+#include <vector>
+#include "Date.util.h"
 class Task {
 protected:
 	int priorityLvl;
@@ -34,4 +36,36 @@ public:
 	
 
 
+};
+
+class DaysTasks {
+protected:
+	Date date;
+	std::vector<Task> taskList;
+public:
+	void addTask(Task& t) {
+
+	}
+	void removeTask(Task& t) {
+
+	}
+	void editTask(Task& t) {
+
+	}
+
+};
+
+class TodoListManager {
+protected:
+	std::vector<DaysTasks> lists;
+public:
+	void addList(DaysTasks& l) {
+
+	}
+	void removeList(DaysTasks& l) {
+
+	}
+	void editList(DaysTasks& l) {
+
+	}
 };
