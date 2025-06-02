@@ -46,7 +46,7 @@ bool Date::isLeapYear(const int y) const{
 //OUTPUT: a valid day value, not exceeding dMax
 //PRECONDITION: d and dMax are valid integers
 //POSTCONDITION: returns d if within range; otherwise returns mMax
-int Date::normalizeDay(const int d, const int mMax) {
+int Date::normalizeDay(const int d, const int mMax) const{
 	return (mMax < d) ? mMax : d;
 }
 
@@ -54,7 +54,7 @@ int Date::normalizeDay(const int d, const int mMax) {
 //OUTPUT: a valid month in the range 1-12
 //PRECONDITION: m may be outside the standard month range
 //POSTCONDITION: returns a valid normalized month value
-int Date::normalizeMonth(const int m) {
+int Date::normalizeMonth(const int m) const{
 	return (m % 12 != 0) ? modulus(m, 12) : 12;
 }
 
@@ -62,7 +62,7 @@ int Date::normalizeMonth(const int m) {
 //OUTPUT: the number of years to adjust based on month overflow or underflow
 //PRECONDITION: m is the result of month arithmetic (may overflow)
 //POSTCONDITION: returns how many years the month change rolls over
-int Date::monthRollover(const int m) {
+int Date::monthRollover(const int m) const{
 	if (m == 0) return -1;
 	if (m == 12) return 0;
 	return (int)floor((float)m / 12);
@@ -72,7 +72,7 @@ int Date::monthRollover(const int m) {
 //OUTPUT: number of days in the given month of the given year
 //PRECONDITION: m and y must be valid month and year values
 //POSTCONDITION: returns the correct number of days in the specified month
-int Date::daysInMonth(const int m, const int y) {
+int Date::daysInMonth(const int m, const int y) const{
 	int monthMax[12] = { 31, isLeapYear(y) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 	return monthMax[normalizeMonth(m) - 1];
 }
@@ -81,7 +81,7 @@ int Date::daysInMonth(const int m, const int y) {
 //OUTPUT: number of days in that year (365 or 366)
 //PRECONDITION: y is a valid positive integer
 //POSTCONDITION: returns 365 for normal years, 366 for leap years
-int Date::daysInYear(const int y) {
+int Date::daysInYear(const int y) const{
 	return isLeapYear(y) ? 366 : 365;
 }
 
@@ -89,7 +89,7 @@ int Date::daysInYear(const int y) {
 //OUTPUT: none
 //PRECONDITION: d may exceed or be less than the number of days in a year
 //POSTCONDITION: adjusts y and d so d fits within the updated year
-void Date::adjustDY(int& d, int& y) {
+void Date::adjustDY(int& d, int& y) const{
 	int dMax = daysInYear(y);
 
 	while (d > dMax) {
@@ -109,7 +109,7 @@ void Date::adjustDY(int& d, int& y) {
 //OUTPUT: none
 //PRECONDITION: y has already been adjusted
 //POSTCONDITION: adjusts m and d so they represent a valid date or, d may overflow or underflow a month
-void Date::adjustMD(int& m, int& d, const int y) {
+void Date::adjustMD(int& m, int& d, const int y) const{
 	int mMax = daysInMonth(m, y);
 	while (d > mMax) {
 		d -= mMax;
@@ -127,7 +127,7 @@ void Date::adjustMD(int& m, int& d, const int y) {
 //OUTPUT: none
 //PRECONDITION: m and d may be out of bounds
 //POSTCONDITION: sets m, d, y to represent a normalized, valid date
-void Date::adjustMDY(int& m, int& d, int& y) {
+void Date::adjustMDY(int& m, int& d, int& y) const{
 	y += monthRollover(m);
 	m = normalizeMonth(m);
 	d = normalizeDay(d, daysInMonth(m, y));
@@ -137,7 +137,7 @@ void Date::adjustMDY(int& m, int& d, int& y) {
 //OUTPUT: a new Date incremented by x days
 //PRECONDITION: current Date is valid
 //POSTCONDITION: returns a new Date with x days added
-Date Date::operator+(const Day& x) {
+Date Date::operator+(const Day& x) const{
 	int m = month;
 	int d = day + x.val;
 	int y = year;
@@ -153,7 +153,7 @@ Date Date::operator+(const Day& x) {
 //OUTPUT: a new Date incremented by x months
 //PRECONDITION: current Date is valid
 //POSTCONDITION: returns a new Date with x months added
-Date Date::operator+(const Month& x) {
+Date Date::operator+(const Month& x) const{
 	int m = month + x.val;
 	int d = day;
 	int y = year;
@@ -167,7 +167,7 @@ Date Date::operator+(const Month& x) {
 //OUTPUT: a new Date incremented by x years
 //PRECONDITION: current Date is valid
 //POSTCONDITION: returns a new Date with x years added
-Date Date::operator+(const Year& x) {
+Date Date::operator+(const Year& x) const{
 	int m = month;
 	int d = day;
 	int y = year + x.val;
@@ -189,17 +189,17 @@ Date& Date::operator=(const Date& x) {
 }
 
 //INPUT/OUTPUT/PRE/POST: identical to corresponding addition operator
-Date Date::operator-(const Month& x) {
+Date Date::operator-(const Month& x) const{
 	return *this + Month(-x.val);
 }
 
 //INPUT/OUTPUT/PRE/POST: identical to corresponding addition operator
-Date Date::operator-(const Day& x) {
+Date Date::operator-(const Day& x) const{
 	return *this + Day(-x.val);
 }
 
 //INPUT/OUTPUT/PRE/POST: identical to corresponding addition operator
-Date Date::operator-(const Year& x) {
+Date Date::operator-(const Year& x) const{
 	return *this + Year(-x.val);
 }
 
@@ -219,7 +219,7 @@ bool Date::operator==(const Date& x) const{
 //OUTPUT: true or false
 //PRECONDITION: both Dates are valid
 //POSTCONDITION: returns true if this Date is less than x
-bool Date::operator<(const Date& x) {
+bool Date::operator<(const Date& x) const{
 	if (year != x.year) return year < x.year;
 	if (month != x.month) return month < x.month;
 	if (day != x.day) return day < x.day;
@@ -230,7 +230,7 @@ bool Date::operator<(const Date& x) {
 //OUTPUT: true or false
 //PRECONDITION: both Dates are valid
 //POSTCONDITION: returns true if this Date is greater than x
-bool Date::operator>(const Date& x){
+bool Date::operator>(const Date& x) const{
 	return (Date)x < *this;
 }
 
@@ -238,7 +238,7 @@ bool Date::operator>(const Date& x){
 //OUTPUT: true or false
 //PRECONDITION: both Dates are valid
 //POSTCONDITION: returns true if this Date is less than or equal to x
-bool Date::operator<=(const Date& x) {
+bool Date::operator<=(const Date& x) const{
 	return *this < x || *this == x;
 }
 
@@ -246,7 +246,7 @@ bool Date::operator<=(const Date& x) {
 //OUTPUT: true or false
 //PRECONDITION: both Dates are valid
 //POSTCONDITION: returns true if this Date is greater than or equal to x
-bool Date::operator>=(const Date& x) {
+bool Date::operator>=(const Date& x) const{
 	return *this > x || *this == x;
 }
 
@@ -340,7 +340,7 @@ std::ostream& operator<<(std::ostream& os, const Date& x) {
 //OUTPUT: formatted Date to standard output
 //PRECONDITION: Date is valid
 //POSTCONDITION: displays Date using operator<<
-void Date::printDate() {
+void Date::printDate() const{
 	std::cout << *this << std::endl;
 }
 

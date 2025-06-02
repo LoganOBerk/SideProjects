@@ -43,14 +43,14 @@
 		// rollover handling, and adjustment of day/month/year components.
 		friend std::ostream& operator<<(std::ostream&, const Date&);
 		bool isLeapYear(const int y) const;
-		int normalizeDay(const int d, const int dMax);
-		int normalizeMonth(const int m);
-		int daysInMonth(const int m, const int y);
-		int daysInYear(const int y);
-		int monthRollover(const int m);
-		void adjustDY(int& d, int& y);
-		void adjustMD(int& m, int& d, const int y);
-		void adjustMDY(int& m, int& d, int& y);
+		int normalizeDay(const int d, const int dMax) const;
+		int normalizeMonth(const int m) const;
+		int daysInMonth(const int m, const int y) const;
+		int daysInYear(const int y) const;
+		int monthRollover(const int m) const;
+		void adjustDY(int& d, int& y) const;
+		void adjustMD(int& m, int& d, const int y) const;
+		void adjustMDY(int& m, int& d, int& y) const;
 		
 	public:
 		
@@ -60,30 +60,30 @@
 		Date(int m, int d, int y);
 
 		// Output and utility
-		void printDate();
+		void printDate() const;
 		int getMonth() const;
 		int getDay() const;
 		int getYear() const;
 
 		// Comparison operators
-		bool operator<(const Date&);
-		bool operator>(const Date&);
+		bool operator<(const Date&) const;
+		bool operator>(const Date&) const;
 		bool operator==(const Date&) const;
-		bool operator<=(const Date&);
-		bool operator>=(const Date&);
+		bool operator<=(const Date&) const;
+		bool operator>=(const Date&) const;
 
 		// Assignment and arithmetic operators
 		Date& operator=(const Date&);
-		Date operator+(const Month&);
-		Date operator-(const Month&);
+		Date operator+(const Month&) const;
+		Date operator-(const Month&) const;
 		Date& operator+=(const Month&);
 		Date& operator-=(const Month&);
-		Date operator+(const Day&);
-		Date operator-(const Day&);
+		Date operator+(const Day&) const;
+		Date operator-(const Day&) const;
 		Date& operator+=(const Day&);
 		Date& operator-=(const Day&);
-		Date operator+(const Year&);
-		Date operator-(const Year&);
+		Date operator+(const Year&) const;
+		Date operator-(const Year&) const;
 		Date& operator+=(const Year&);
 		Date& operator-=(const Year&);
 
