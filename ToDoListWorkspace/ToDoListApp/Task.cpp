@@ -50,13 +50,13 @@ public:
 		this->comment = comment;
 	}
 	
-	bool operator<(Task& t) {
+	bool operator<(const Task& t) const{
 		return priorityLvl < t.priorityLvl;
 	}
-	bool operator>(Task& t) {
+	bool operator>(const Task& t) const{
 		return t < *this;
 	}
-	void displayTask() {
+	void displayTask() const{
 		std::cout << *this << std::endl;
 	}
 
@@ -67,28 +67,30 @@ std::ostream& operator<<(std::ostream& os, const Task& x) {
 	return os;
 }
 
+template <typename T>
+void swap(T& t1, T& t2) {
+	T t = t1;
+	t1 = t2;
+	t2 = t;
+}
+template <typename T>
+void organize(std::vector<T>& tl) {
+	bool swapped;
+	do {
+		swapped = false;
+		for (int i = 0; i < tl.size() - 1; i++) {
+			if (tl[i] < tl[i + 1]) {
+				swap(tl[i], tl[i + 1]);
+				swapped = true;
+			}
+		}
+	} while (swapped);
+}
 class DaysTasks {
 protected:
 	Date date;
 	std::vector<Task> taskList;
-
-	void swap(Task& t1, Task& t2) {
-		Task t = t1;
-		t1 = t2;
-		t2 = t;
-	}
-	void organize(std::vector<Task>& tl) {
-		bool swapped;
-		do {
-			swapped = false;
-			for (int i = 0; i < tl.size() - 1; i++) {
-				if (tl[i] < tl[i + 1]) {
-					swap(tl[i], tl[i + 1]);
-					swapped = true;
-				}
-			}
-		} while (swapped);
-	}
+	friend std::ostream& operator<<(std::ostream& os, const DaysTasks& x);
 public:
 	void addTask(const Task& t) {
 		taskList.push_back(t);
@@ -100,19 +102,33 @@ public:
 	void editTask(Task& t) {
 
 	}
-	void displayTaskList() {
-		for (int i = 0; i < taskList.size(); i++) {
-			taskList[i].displayTask();
-		}
+	void displayTaskList() const{
+		std::cout << *this << std::endl;
+	}
+	bool operator<(const DaysTasks& t) const {
+		return date < t.date;
+	}
+	bool operator>(const DaysTasks& t) const {
+		return t < *this;
 	}
 };
+
+std::ostream& operator<<(std::ostream& os, const DaysTasks& x) {
+	os << "Todays Date: " << x.date << std::endl;
+	for (int i = 0; i < x.taskList.size(); i++) {
+		x.taskList[i].displayTask();
+	}
+	return os;
+}
 
 class TodoListManager{
 protected:
 	std::vector<DaysTasks> lists;
+
 public:
 	void addList(DaysTasks& l) {
-
+		lists.push_back(l);
+		organize(lists);
 	}
 	void removeList(DaysTasks& l) {
 
@@ -216,6 +232,7 @@ int main() {
 	taskList1.addTask(Task(2, "Third Task", "------", true));
 	taskList1.addTask(Task(1, "Fourth Task", "------", false));
 	taskList1.addTask(Task(3, "Fifth Task", "------", true));
+	std::cout << "========================================" << std::endl;
 	taskList1.displayTaskList();
 	return 0;
 }
