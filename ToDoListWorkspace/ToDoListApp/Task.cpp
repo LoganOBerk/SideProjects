@@ -2,6 +2,33 @@
 #include <vector>
 #include "Date.util.h"
 
+template <typename T>
+class LinkedList
+{
+private:
+	struct Node {
+		T data;
+		Node* next;
+
+		Node(T d) : data(d), next(nullptr){}
+	};
+	Node* head = nullptr;
+	Node* tail = nullptr;
+public:
+	void insert(T x) {
+
+	}
+	void remove(T x) {
+
+	}
+	void edit(T x, T y) {
+
+	}
+	T* find(T x) {
+		
+	}
+
+};
 class Task {
 protected:
 	int priorityLvl;
