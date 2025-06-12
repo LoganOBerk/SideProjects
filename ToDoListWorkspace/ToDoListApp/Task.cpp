@@ -2,33 +2,6 @@
 #include <vector>
 #include "Date.util.h"
 
-template <typename T>
-class LinkedList
-{
-private:
-	struct Node {
-		T data;
-		Node* next;
-
-		Node(T d) : data(d), next(nullptr){}
-	};
-	Node* head = nullptr;
-	Node* tail = nullptr;
-public:
-	void insert(T x) {
-
-	}
-	void remove(T x) {
-
-	}
-	void edit(T x, T y) {
-
-	}
-	T* find(T x) {
-		
-	}
-
-};
 class Task {
 protected:
 	int priorityLvl;
@@ -51,29 +24,29 @@ public:
 
 	Task(int pl = 1, std::string tn = "-------", std::string c = "-------", bool ic = false) : priorityLvl(pl), taskName(tn), comment(c), isComplete(ic) {}
 
-	int getPriorityLvl() {
+	int getPriorityLvl() const{
 		return priorityLvl;
 	}
-	std::string getTaskName() {
+	std::string getTaskName() const{
 		return taskName;
 	}
-	std::string getComment() {
+	std::string getComment() const{
 		return comment;
 	}
-	bool getIsComplete() {
+	bool getIsComplete() const{
 		return isComplete;
 	}
 
-	void setIsComplete(bool& isComplete) {
+	void setIsComplete(const bool& isComplete) {
 		this->isComplete = isComplete;
 	}
-	void setPriorityLvl(int& priorityLvl) {
+	void setPriorityLvl(const int& priorityLvl) {
 		this->priorityLvl = priorityLvl;
 	}
-	void setTaskName(std::string& taskName) {
+	void setTaskName(const std::string& taskName) {
 		this->taskName = taskName;
 	}
-	void setComment(std::string& comment) {
+	void setComment(const std::string& comment) {
 		this->comment = comment;
 	}
 	
@@ -83,10 +56,18 @@ public:
 	bool operator>(const Task& t) const{
 		return t < *this;
 	}
+	bool operator==(const Task& t) const {
+		return taskName == t.taskName;
+	}
 	void displayTask() const{
 		std::cout << *this << std::endl;
 	}
-
+	void displayOptions() const {
+		std::cout << "1. Priority Level" << std::endl;
+		std::cout << "2. Task Name" << std::endl;
+		std::cout << "3. Comment" << std::endl;
+		std::cout << "4. Status" << std::endl;
+	}
 };
 
 std::ostream& operator<<(std::ostream& os, const Task& x) {
@@ -113,24 +94,40 @@ void organize(std::vector<T>& tl) {
 		}
 	} while (swapped);
 }
+template <typename T>
+void remove(std::vector<T>& tl, T t) {
+	auto it = std::find(tl.begin(), tl.end(), t);
+	if (it != tl.end()) {
+		tl.erase(it);
+	}
+}
+
 class DaysTasks {
 protected:
 	Date date;
 	std::vector<Task> taskList;
 	friend std::ostream& operator<<(std::ostream& os, const DaysTasks& x);
 public:
+	DaysTasks() {}
+	DaysTasks(Date d) : date(d) {}
+	Date getDate() const {
+		return date;
+	}
 	void addTask(const Task& t) {
 		taskList.push_back(t);
 		organize(taskList);
 	}
 	void removeTask(Task& t) {
-		
+		remove(taskList, t);
 	}
 	void editTask(Task& t) {
 
 	}
 	void displayTaskList() const{
 		std::cout << *this << std::endl;
+		if (taskList.empty()) std::cout << "No tasks at this time." << std::endl;
+		std::cout << std::endl;
+		displayOptions();
 	}
 	bool operator<(const DaysTasks& t) const {
 		return date < t.date;
@@ -138,10 +135,19 @@ public:
 	bool operator>(const DaysTasks& t) const {
 		return t < *this;
 	}
+	bool operator==(const DaysTasks& t) const {
+		return date == t.date;
+	}
+	void displayOptions() const {
+		std::cout << "1. Add Task" << std::endl;
+		std::cout << "2. Remove Task" << std::endl;
+		std::cout << "3. Edit Task" << std::endl;
+		std::cout << "4. Go Back" << std::endl;
+	}
 };
 
 std::ostream& operator<<(std::ostream& os, const DaysTasks& x) {
-	os << "Todays Date: " << x.date << std::endl;
+	os << "Date: " << x.date << std::endl;
 	for (int i = 0; i < x.taskList.size(); i++) {
 		x.taskList[i].displayTask();
 	}
@@ -153,15 +159,43 @@ protected:
 	std::vector<DaysTasks> lists;
 
 public:
+	std::vector<DaysTasks> getLists() const {
+		return lists;
+	}
+	DaysTasks find(Date& d) {
+		for (int i = 0; i < lists.size(); i++) {
+			if (lists[i].getDate() == d) {
+				return lists[i];
+			}
+		}
+		throw std::invalid_argument("No List Exists with that date!");
+	}
+	void createList(Date& d) {
+		DaysTasks* list = new DaysTasks(d);
+		addList(*list);
+		std::cout << "List Successfully Created!" << std::endl;
+	}
 	void addList(DaysTasks& l) {
 		lists.push_back(l);
 		organize(lists);
 	}
-	void removeList(DaysTasks& l) {
-
+	void openList(Date& d) {
+		try{
+			DaysTasks list = find(d);
+			list.displayTaskList();
+		}
+		catch (const std::invalid_argument& e){
+			std::cout << e.what() << std::endl;
+		}
 	}
-	void editList(DaysTasks& l) {
-
+	void removeList(DaysTasks& l) {
+		remove(lists, l);
+	}
+	void displayOptions() const {
+		std::cout << "1. Open List" << std::endl;
+		std::cout << "2. Create List" << std::endl;
+		std::cout << "3. Remove List" << std::endl;
+		std::cout << "4. Exit" << std::endl;
 	}
 };
 
@@ -253,13 +287,78 @@ int main() {
 
 	std::cout << "========================================" << std::endl;
 
-	DaysTasks taskList1;
-	taskList1.addTask(Task(1, "First Task", "------", false));
-	taskList1.addTask(Task(3, "Second Task", "------", false));
-	taskList1.addTask(Task(2, "Third Task", "------", true));
-	taskList1.addTask(Task(1, "Fourth Task", "------", false));
-	taskList1.addTask(Task(3, "Fifth Task", "------", true));
+	DaysTasks* taskList1 = new DaysTasks;
+	taskList1->addTask(Task(1, "First Task", "------", false));
+	taskList1->addTask(Task(3, "Second Task", "------", false));
+	taskList1->addTask(Task(2, "Third Task", "------", true));
+	taskList1->addTask(Task(1, "Fourth Task", "------", false));
+	taskList1->addTask(Task(3, "Fifth Task", "------", true));
 	std::cout << "========================================" << std::endl;
-	taskList1.displayTaskList();
+	taskList1->displayTaskList();
+	
+
+	std::cout << "=================================" << std::endl;
+	std::cout << "Welcome To Your To-do List Manager!" << std::endl;
+	std::cout << "=================================" << std::endl;
+	TodoListManager todoListManager;
+	while (true) {
+		Date date;
+		int input;
+		bool openList = false;
+
+		if (std::cin.fail()) {
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			std::cout << "Invalid Date/Format: type in MM/DD/YYYY or MM-DD-YYYY format" << std::endl;
+		}
+
+		std::cout << std::endl;
+		todoListManager.displayOptions();
+		std::cout << std::endl;
+		std::cout << "Enter choice 1-4: ";
+
+		if (!openList) {
+			std::cin >> input;
+			if (std::cin.peek() != '\n') {
+				std::cin.clear();
+				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+				input = -1;
+			}
+			std::cout << std::endl;
+			try {
+				switch (input) {
+				case 1:
+					std::cout << "What date would you like to access?" << std::endl;
+					std::cout << "Enter date: ";
+					std::cin >> date;
+					std::cout << std::endl;
+					if (!std::cin.fail()) {
+						todoListManager.openList(date);
+						openList = true;
+					}
+					break;
+				case 2:
+					std::cout << "What date would you like to create a new list for?" << std::endl;
+					std::cout << "Enter date: ";
+					std::cin >> date;
+					std::cout << std::endl;
+					if (!std::cin.fail()) todoListManager.createList(date);
+					break;
+				case 3: break;
+				case 4: break;
+				default:
+					std::cout << "Invalid Input enter 1-4" << std::endl;
+				}
+			}
+			catch (const std::invalid_argument& e) {
+				std::cout << "List cannot exist: " << e.what() << std::endl;
+			}
+		}
+
+		if (openList) {
+		
+		}
+	}
+
 	return 0;
 }

@@ -335,6 +335,24 @@ std::ostream& operator<<(std::ostream& os, const Date& x) {
 	os << std::setw(4) << std::setfill('0') << x.year;
 	return os;
 }
+std::istream& operator>>(std::istream& is, Date& x) {
+	int m, d, y;
+	char delim1, delim2;
+	is >> m >> delim1 >> d >> delim2 >> y;
+	if (delim1 != delim2 || (delim1 != '/' && delim1 != '-')) {
+		is.setstate(std::ios::failbit);
+	}
+	else {
+		try {
+			x = Date(m, d, y);
+		}
+		catch (const std::invalid_argument& e) {
+			throw;
+		}
+	}
+
+	return is;
+}
 
 //INPUT: none
 //OUTPUT: formatted Date to standard output

@@ -42,6 +42,7 @@
 		// Internal helper functions for leap year checks, normalization,
 		// rollover handling, and adjustment of day/month/year components.
 		friend std::ostream& operator<<(std::ostream&, const Date&);
+		friend std::istream& operator>>(std::istream&, Date&);
 		bool isLeapYear(const int y) const;
 		int normalizeDay(const int d, const int dMax) const;
 		int normalizeMonth(const int m) const;
