@@ -1,6 +1,17 @@
 #include <string>
 #include <vector>
 #include "Date.util.h"
+void getIntegerInput(std::istream& is, int& input) {
+	std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
+	std::cout << "Enter choice 1-4: ";
+	is >> input;
+	std::cout << std::endl;
+	if (std::cin.peek() != '\n') {
+		input = -1;
+	}
+	std::cin.clear();
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
 
 class Task {
 protected:
@@ -129,6 +140,7 @@ public:
 		taskList.push_back(t);
 		organize(taskList);
 	}
+	void editTask(const std::string& n) {}
 	void removeTask(const std::string& n) {
 		remove(taskList, Task(n));
 	}
@@ -208,6 +220,44 @@ public:
 		organize(taskLists);
 	}
 	
+	void openList(const Date& d) {
+		bool listIsOpen = false;
+		do {
+			try {
+				TaskList* tl = find(d);
+				listIsOpen = true;
+				int input;
+				tl->displayTaskList();
+				tl->displayOptions();
+				getIntegerInput(std::cin, input);
+				std::string name;
+				switch (input) {
+				case 1:
+					std::cout << "Enter task name: ";
+					getline(std::cin, name);
+					tl->createTask(name);
+					break;
+				case 2:
+					std::cout << "Enter task name: ";
+					getline(std::cin, name);
+					tl->removeTask(name);
+					break;
+				case 3:
+					tl->editTask(name);
+					break;
+				case 4:
+					listIsOpen = false;
+					break;
+				default:
+					std::cout << "Invalid Input enter 1-4" << std::endl;
+				}
+			}
+			catch (const std::invalid_argument& e) {
+				std::cout << e.what() << std::endl << std::endl;
+			}
+		} while (listIsOpen);
+	}
+
 	void removeList(const Date& d) {
 		try {
 			remove(taskLists, *find(d));
@@ -329,139 +379,65 @@ int main() {
 	std::cout << "=====================================" << std::endl;
 	std::cout << std::endl;
 	
-	TodoListManager todoListManager;
-	TaskList taskList;
+	TodoListManager* todoListManager = new TodoListManager;
 	bool running = true;
-	bool openList = false;
 	while (running) {
 		Date date;
 		int input;
-
-		if (std::cin.fail()) {
-			std::cin.clear();
-			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-			std::cout << "Invalid Date/Format: type in MM/DD/YYYY or MM-DD-YYYY format" << std::endl;
-		}
 		
-		if (!openList) {
-			std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
-			std::cout << "Create, Manage, or Remove To-do Lists" << std::endl;
-			std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
-			todoListManager.displayOptions();
-			std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
-			std::cout << "Enter choice 1-4: ";
-			std::cin >> input;
-			std::cout << std::endl;
-			if (std::cin.peek() != '\n') {
-				std::cin.clear();
-				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-				input = -1;
-			}
-			try {
-				
-				switch (input) {
-				case 1:
-					std::cout << "What date would you like to access?" << std::endl;
-					std::cout << "Enter date: ";
-					std::cin >> date;
-					std::cout << std::endl;
-					if (!std::cin.fail()) {
-						taskList = *todoListManager.find(date);
-						openList = true;
-					}
-					break;
-				case 2:
-					std::cout << "What date would you like to create a new list for?" << std::endl;
-					std::cout << "Enter date: ";
-					std::cin >> date;
-					std::cout << std::endl;
-					if (!std::cin.fail()) {
-						todoListManager.createList(date);
-					}
-					break;
-				case 3: 
-					std::cout << "What date would you like to remove a list?" << std::endl;
-					std::cout << "Enter date: ";
-					std::cin >> date;
-					std::cout << std::endl;
-					if (!std::cin.fail()) {
-						todoListManager.removeList(date);
-					}
-					break;
-				case 4: 
-					running = false;
-					break;
-				default:
-					std::cout << "Invalid Input enter 1-4" << std::endl;
-				}
-			}
-			catch (const std::invalid_argument& e) {
-				std::cout << e.what() << std::endl << std::endl;
-			}
-		}
-		bool editTask = false;
-		std::string name;
-		
-		
-		if (openList) {
+		std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
+		std::cout << "Create, Manage, or Remove To-do Lists" << std::endl;
+		std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
+		todoListManager->displayOptions();
+		getIntegerInput(std::cin, input);
 		try {
-			taskList.displayTaskList();
-			taskList.displayOptions();
-			std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
-			std::cout << "Enter choice 1-4: ";
-			std::cin >> input;
-			std::cout << std::endl;
-			if (std::cin.peek() != '\n') {
-				std::cin.clear();
-				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-				input = -1;
-			}
 			switch (input) {
 			case 1:
-				std::cout << "Enter task name: ";
-				std::cin.clear();
-				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-				getline(std::cin, name);
-				taskList.createTask(name);
-				todoListManager.update(date, taskList);
+				std::cout << "What date would you like to access?" << std::endl;
+				std::cout << "Enter date: ";
+				std::cin >> date;
+				std::cout << std::endl;
+				if (std::cin.fail() || std::cin.peek() != '\n') {
+					std::cin.clear();
+					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+					std::cout << "Invalid Date/Format: type in MM/DD/YYYY or MM-DD-YYYY format" << std::endl;
+				}
+				else { todoListManager->openList(date); };
 				break;
 			case 2:
-				std::cout << "Enter task name: ";
-				std::cin.clear();
-				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-				getline(std::cin, name);
-				taskList.removeTask(name);
-				todoListManager.update(date, taskList);
+				std::cout << "What date would you like to create a new list for?" << std::endl;
+				std::cout << "Enter date: ";
+				std::cin >> date;
+				std::cout << std::endl;
+				if (std::cin.fail() || std::cin.peek() != '\n') {
+					std::cin.clear();
+					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+					std::cout << "Invalid Date/Format: type in MM/DD/YYYY or MM-DD-YYYY format" << std::endl;
+				}
+				else { todoListManager->createList(date); };
+
 				break;
-			case 3:
-				editTask = true;
+			case 3: 
+				std::cout << "What date would you like to remove a list?" << std::endl;
+				std::cout << "Enter date: ";
+				std::cin >> date;
+				std::cout << std::endl;
+				if (std::cin.fail() || std::cin.peek() != '\n') {
+					std::cin.clear();
+					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+					std::cout << "Invalid Date/Format: type in MM/DD/YYYY or MM-DD-YYYY format" << std::endl;
+				}
+				else { todoListManager->removeList(date); };
 				break;
-			case 4:
-				openList = false;
+			case 4: 
+				running = false;
 				break;
 			default:
 				std::cout << "Invalid Input enter 1-4" << std::endl;
 			}
-
-			} catch (const std::invalid_argument& e) {
-				std::cout << e.what() << std::endl << std::endl;
-			}
 		}
-		
-
-		Task task;
-		if(editTask) task = *taskList.find(name);
-		while (editTask) {
-			task.displayOptions();
-			std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
-			std::cout << "Enter choice 1-4: ";
-			std::cin >> input;
-			std::cout << std::endl;
-			if (std::cin.peek() != '\n') {
-				std::cin.clear();
-				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-				input = -1;
-			}
+		catch (const std::invalid_argument& e) {
+			std::cout << e.what() << std::endl << std::endl;
 		}
 	}
 
