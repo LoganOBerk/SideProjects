@@ -104,12 +104,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\logim\source\repos\SideProjects\ToDoListWorkspace\ToDoListApp</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\logim\source\repos\SideProjects\ToDoListWorkspace\ToDoListApp;$(SolutionDir)\ToDoListApp\libs\googletest\googletest</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -129,6 +130,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\ToDoListApp\libs\googletest\googletest\src\gtest-death-test.cc" />
+    <ClCompile Include="..\ToDoListApp\libs\googletest\googletest\src\gtest-filepath.cc" />
+    <ClCompile Include="..\ToDoListApp\libs\googletest\googletest\src\gtest-port.cc" />
+    <ClCompile Include="..\ToDoListApp\libs\googletest\googletest\src\gtest-printers.cc" />
+    <ClCompile Include="..\ToDoListApp\libs\googletest\googletest\src\gtest-test-part.cc" />
+    <ClCompile Include="..\ToDoListApp\libs\googletest\googletest\src\gtest-typed-test.cc" />
+    <ClCompile Include="..\ToDoListApp\libs\googletest\googletest\src\gtest.cc" />
     <ClCompile Include="ToDoListApp.Tests.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -137,16 +145,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ClInclude Include="..\ToDoListApp\libs\googletest\googletest\src\gtest-internal-inl.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1.7\build\native\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.targets" Condition="Exists('..\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1.7\build\native\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.targets')" />
-  </ImportGroup>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1.7\build\native\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1.7\build\native\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.targets'))" />
-  </Target>
+  <ImportGroup Label="ExtensionTargets" />
 </Project>

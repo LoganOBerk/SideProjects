@@ -342,13 +342,12 @@ std::istream& operator>>(std::istream& is, Date& x) {
 	if (delim1 != delim2 || (delim1 != '/' && delim1 != '-')) {
 		is.setstate(std::ios::failbit);
 	}
-	else {
-		try {
-			x = Date(m, d, y);
-		}
-		catch (const std::invalid_argument& e) {
-			throw;
-		}
+	
+	try {
+		x = Date(m, d, y);
+	}
+	catch (const std::invalid_argument& e) {
+		is.setstate(std::ios::failbit);
 	}
 
 	return is;
