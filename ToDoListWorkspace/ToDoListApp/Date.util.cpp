@@ -12,6 +12,10 @@ Date::Date(int m, int d, int y) : month(m), day(d), year(y) {
 	if (m < 1 || m > 12) throw std::invalid_argument("Months are between 1-12");
 	if (daysInMonth(m, y) < d) throw std::invalid_argument("Invalid number of days for month");
 }
+
+bool Date::isValid() const {
+	return day != 0 && month != 0 && year != 0;
+}
 // INPUT: None
 // OUTPUT: Integer representing the month of this Date
 // PRECONDITION: This Date object is valid and constructed
@@ -329,10 +333,15 @@ Date Date::operator--(int) {
 //PRECONDITION: Date is valid
 //POSTCONDITION: prints Date in "MonthName DD, YYYY" format
 std::ostream& operator<<(std::ostream& os, const Date& x) {
-	std::string monthName[12] = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
-	os << monthName[x.month - 1] << ' ';
-	os << std::setw(2) << std::setfill('0') << x.day << ", ";
-	os << std::setw(4) << std::setfill('0') << x.year;
+	if (x != Date()) {
+		std::string monthName[12] = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
+		os << monthName[x.month - 1] << ' ';
+		os << std::setw(2) << std::setfill('0') << x.day << ", ";
+		os << std::setw(4) << std::setfill('0') << x.year;
+	}
+	else {
+		os << "NAN";
+	}
 	return os;
 }
 std::istream& operator>>(std::istream& is, Date& x) {

@@ -12,15 +12,14 @@ void getIntegerInput(std::istream& is, int& input) {
 	std::cin.clear();
 	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
-bool getValidDateInput(std::istream& is, Date& input) {
-	std::cin >> input;
-	if (std::cin.fail() || std::cin.peek() != '\n') {
-		std::cin.clear();
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+void getDateInput(std::istream& is, Date& input) {
+	is >> input;
+	if (is.fail() || is.peek() != '\n') {
+		is.clear();
+		is.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		std::cout << std::endl << "Invalid Date/Format: type in MM/DD/YYYY or MM-DD-YYYY format" << std::endl;
-		return false;
+		input = Date();
 	}
-	return true;
 }
 class Task {
 protected:
@@ -374,17 +373,20 @@ int main() {
 		case 1:
 			std::cout << "What date would you like to access?" << std::endl;
 			std::cout << "Enter date: ";
-			if(getValidDateInput(std::cin, date)) todoListManager.openList(todoListManager, date);
+			getDateInput(std::cin, date);
+			if (date.isValid()) todoListManager.openList(todoListManager, date);
 			break;
 		case 2:
 			std::cout << "What date would you like to create a new list for?" << std::endl;
 			std::cout << "Enter date: ";
-			if (getValidDateInput(std::cin, date)) todoListManager.createList(date);
+			getDateInput(std::cin, date);
+			if (date.isValid()) todoListManager.createList(date);
 			break;
 		case 3: 
 			std::cout << "What date would you like to remove a list?" << std::endl;
 			std::cout << "Enter date: ";
-			if (getValidDateInput(std::cin, date)) todoListManager.removeList(date);
+			getDateInput(std::cin, date);
+			if (date.isValid()) todoListManager.removeList(date);
 			break;
 		case 4: 
 			running = false;

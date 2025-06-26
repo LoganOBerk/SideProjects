@@ -57,7 +57,7 @@
 		
 
 		// Constructors ensure validity of initialized dates
-		Date() : month(1), day(1), year(1) {}
+		Date() : month(0), day(0), year(0) {}
 		Date(int m, int d, int y);
 
 		// Output and utility
@@ -65,6 +65,7 @@
 		int getMonth() const;
 		int getDay() const;
 		int getYear() const;
+		bool isValid() const;
 
 		// Comparison operators
 		bool operator<(const Date&) const;
