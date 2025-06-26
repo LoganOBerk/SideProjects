@@ -119,9 +119,9 @@ public:
 			std::cout << std::endl << "Task Already Exists!" << std::endl;
 		}
 		else {
-			Task* task = new Task(n);
+			Task task(n);
 			std::cout << std::endl << "Task Successfully Created!" << std::endl;
-			addTask(*task);
+			addTask(task);
 		}
 		
 	}
@@ -187,9 +187,9 @@ public:
 			std::cout << std::endl << "List Already Exists!" << std::endl;
 		}
 		else {
-			TaskList* taskList = new TaskList(d);
+			TaskList taskList(d);
 			std::cout << std::endl << "List Successfully Created!" << std::endl;
-			addList(*taskList);
+			addList(taskList);
 		}
 	}
 	void addList(const TaskList& l) {
