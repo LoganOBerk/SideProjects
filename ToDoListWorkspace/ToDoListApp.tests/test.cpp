@@ -1,7 +1,7 @@
 #include <iostream>
 #include <gtest/gtest.h>
-#include "Date.util.cpp"
-#include "Math.util.cpp"
+#include "Date.util.h"
+#include "Math.util.h"
 
 
 TEST(Modulus_Compute, DividendEqualsDivisor_ReturnsZero) {
