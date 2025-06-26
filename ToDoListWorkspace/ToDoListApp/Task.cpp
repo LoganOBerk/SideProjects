@@ -196,45 +196,41 @@ public:
 		taskLists.insert(std::pair<const Date, TaskList>(l.getDate(), l));
 	}
 	
-	void openList(TodoListManager& m, const Date d) {
-		bool listIsOpen = false;
-		do {
-			TaskList* tl = m.getList(d);
-			if (tl == nullptr) {
-				std::cout << std::endl << "List Does Not Exist!" << std::endl;
-			}
-			else {
-				int input;
-				std::string name;
-				listIsOpen = true;
+	void openList(const Date d) {
+		TaskList* tl = getList(d);
+		if (!tl) {
+			std::cout << std::endl << "List Does Not Exist!" << std::endl; 
+			return;
+		}
+		while(true){
+			int input;
+			std::string name;
 				
-				tl->displayTaskListMenu();
-				getIntegerInput(std::cin, input);
+			tl->displayTaskListMenu();
+			getIntegerInput(std::cin, input);
 
 				
-				switch (input) {
-				case 1:
-					std::cout << std::endl;
-					std::cout << "Enter task name: ";
-					getline(std::cin, name);
-					tl->createTask(name);
-					break;
-				case 2:
-					std::cout << std::endl;
-					std::cout << "Enter task name: ";
-					getline(std::cin, name);
-					tl->removeTask(name);
-					break;
-				case 3:
-					break;
-				case 4:
-					listIsOpen = false;
-					break;
-				default:
-					std::cout << "Invalid Input enter 1-4" << std::endl;
-				}
+			switch (input) {
+			case 1:
+				std::cout << std::endl;
+				std::cout << "Enter task name: ";
+				getline(std::cin, name);
+				tl->createTask(name);
+				break;
+			case 2:
+				std::cout << std::endl;
+				std::cout << "Enter task name: ";
+				getline(std::cin, name);
+				tl->removeTask(name);
+				break;
+			case 3:
+				break;
+			case 4:
+				return;
+			default:
+				std::cout << "Invalid Input enter 1-4" << std::endl;
 			}
-		} while (listIsOpen);
+		};
 	}
 
 	void removeList(const Date& d) {
@@ -374,7 +370,7 @@ int main() {
 			std::cout << "What date would you like to access?" << std::endl;
 			std::cout << "Enter date: ";
 			getDateInput(std::cin, date);
-			if (date.isValid()) todoListManager.openList(todoListManager, date);
+			if (date.isValid()) todoListManager.openList(date);
 			break;
 		case 2:
 			std::cout << "What date would you like to create a new list for?" << std::endl;
