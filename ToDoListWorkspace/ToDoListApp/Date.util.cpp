@@ -346,7 +346,7 @@ std::istream& operator>>(std::istream& is, Date& x) {
 	try {
 		x = Date(m, d, y);
 	}
-	catch (const std::invalid_argument& e) {
+	catch (const std::invalid_argument&) {
 		is.setstate(std::ios::failbit);
 	}
 

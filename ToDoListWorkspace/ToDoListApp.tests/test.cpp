@@ -1,7 +1,7 @@
 #include <iostream>
 #include <gtest/gtest.h>
-#include "Date.util.h"
-#include "Math.util.h"
+#include "Date.util.cpp"
+#include "Math.util.cpp"
 
 
 TEST(Modulus_Compute, DividendEqualsDivisor_ReturnsZero) {
@@ -156,6 +156,7 @@ TEST(Addition_Years, LeapYearToNonLeapYearMonthAdjustment_ReturnDateWithAdjusted
 	EXPECT_EQ(d.getDay(), x.getDay());
 	EXPECT_EQ(d.getYear(), x.getYear());
 }
+
 int main(int argc, char** argv) {
 	::testing::InitGoogleTest(&argc, argv);
 	return RUN_ALL_TESTS();
