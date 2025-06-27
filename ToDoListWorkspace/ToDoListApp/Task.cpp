@@ -1,7 +1,21 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include "Date.util.h"
+#include "Date.h"
+bool BothAreSpaces(char lhs, char rhs) {
+	return (lhs == rhs) && (lhs == ' ');
+}
+void trim(std::string& s) {
+	s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
+		return !std::isspace(ch);
+		}));
+	s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) {
+		return !std::isspace(ch);
+		}).base(), s.end());
+	std::string::iterator new_end = std::unique(s.begin(), s.end(), BothAreSpaces);
+	s.erase(new_end, s.end());
+}
+
 void getIntegerInput(std::istream& is, int& input) {
 	std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
 	std::cout << "Enter a choice: ";
@@ -12,11 +26,24 @@ void getIntegerInput(std::istream& is, int& input) {
 	std::cin.clear();
 	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
+
+void getTaskName(std::istream& is, std::string& n) {
+	getline(is, n);
+	trim(n);
+}
+
+void removeWhiteSpace(std::string& s) {
+	s.erase(std::remove_if(s.begin(), s.end(), ::isspace), s.end());
+}
 void getDateInput(std::istream& is, Date& input) {
-	is >> input;
-	if (is.fail() || is.peek() != '\n') {
-		is.clear();
-		is.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	std::string s;
+	getline(is, s);
+	removeWhiteSpace(s);
+	std::istringstream iss(s);
+	iss >> input;
+	if (iss.fail() || iss.peek() != EOF) {
+		iss.clear();
+		iss.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		std::cout << std::endl << "Invalid Date/Format: type in MM/DD/YYYY or MM-DD-YYYY format" << std::endl;
 		input = Date();
 	}
@@ -82,16 +109,30 @@ public:
 	void displayTask() const{
 		std::cout << *this << std::endl;
 	}
+	void displayTaskMenu() const{
+		std::cout <<
+		std::endl << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
+		std::cout << "             Edit Task               " << std::endl;
+		std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
+		displayTask();
+		std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
+		displayOptions();
+	}
+
 	void displayOptions() const {
 		std::cout << "1. Priority Level" << std::endl;
 		std::cout << "2. Task Name" << std::endl;
 		std::cout << "3. Comment" << std::endl;
 		std::cout << "4. Status" << std::endl;
+		std::cout << "5. Go Back" << std::endl;
 	}
 };
 
 std::ostream& operator<<(std::ostream& os, const Task& x) {
-	os << x.taskName << " : " << x.priority() << " : " << x.comment << " : " << x.status();
+	os << x.taskName << std::endl;
+	os << "   Priority: " << x.priority() << std::endl;
+	os << "   Status: " << x.status() << std::endl;
+	os << "   Comment: " << x.comment << std::endl;
 	return os;
 }
 
@@ -124,6 +165,36 @@ public:
 			addTask(task);
 		}
 		
+	}
+	void openTaskEditor(const std::string& n) {
+		Task* t = getTask(n);
+		if (!t) {
+			std::cout << std::endl << "List Does Not Exist!" << std::endl;
+			return;
+		}
+		while (true) {
+			int input;
+			std::string name;
+
+			t->displayTaskMenu();
+			getIntegerInput(std::cin, input);
+
+
+			switch (input) {
+			case 1:
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
+			case 4:
+				break;
+			case 5:
+				return;
+			default:
+				std::cout << "Invalid Input enter 1-5" << std::endl;
+			}
+		};
 	}
 	void addTask(const Task& t) {
 		taskList.insert(std::pair<std::string, Task>(t.getTaskName(), t));
@@ -214,16 +285,20 @@ public:
 			case 1:
 				std::cout << std::endl;
 				std::cout << "Enter task name: ";
-				getline(std::cin, name);
+				getTaskName(std::cin, name);
 				tl->createTask(name);
 				break;
 			case 2:
 				std::cout << std::endl;
 				std::cout << "Enter task name: ";
-				getline(std::cin, name);
+				getTaskName(std::cin, name);
 				tl->removeTask(name);
 				break;
 			case 3:
+				std::cout << std::endl;
+				std::cout << "Enter task name: ";
+				getTaskName(std::cin, name);
+				tl->openTaskEditor(name);
 				break;
 			case 4:
 				return;

@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Date.util.cpp">
+    <ClCompile Include="Date.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Math.util.cpp">
@@ -26,7 +26,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Date.util.h">
+    <ClInclude Include="Date.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Math.util.h">

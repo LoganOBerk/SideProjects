@@ -1,6 +1,6 @@
 #include <iostream>
 #include <iomanip>
-#include "Date.util.h"
+#include "Date.h"
 
 
 //INPUT: integers representing a m, month; d, day; y, year
@@ -348,6 +348,7 @@ std::istream& operator>>(std::istream& is, Date& x) {
 	int m, d, y;
 	char delim1, delim2;
 	is >> m >> delim1 >> d >> delim2 >> y;
+
 	if (delim1 != delim2 || (delim1 != '/' && delim1 != '-')) {
 		is.setstate(std::ios::failbit);
 	}
