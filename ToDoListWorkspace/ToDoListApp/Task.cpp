@@ -17,21 +17,47 @@ void trim(std::string& s) {
 }
 
 void getIntegerInput(std::istream& is, int& input) {
-	std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
-	std::cout << "Enter a choice: ";
 	is >> input;
-	if (std::cin.peek() != '\n') {
+	if (is.peek() != '\n') {
 		input = -1;
 	}
-	std::cin.clear();
-	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	is.clear();
+	is.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
-void getTaskName(std::istream& is, std::string& n) {
+void getNameInput(std::istream& is, std::string& n) {
 	getline(is, n);
 	trim(n);
 }
+void getPriorityInput(std::istream& is, std::string& input) {
+	std::string initPrio = input;
+	getline(is, input);
+	trim(input);
+	std::transform(input.begin(), input.end(), input.begin(),
+		[](unsigned char c) { return std::tolower(c); });
+	if (input != "high" && input != "medium" && input != "low") {
+		std::cout << std::endl << "Invalid Priority: Priority is either high, medium or low" << std::endl;
+		input = initPrio;
+	}
+	
 
+}
+
+void getStatusInput(std::istream& is, std::string& input) {
+	std::string initStatus = input;
+	getline(is, input);
+	trim(input);
+	std::transform(input.begin(), input.end(), input.begin(),
+		[](unsigned char c) { return std::tolower(c); });
+	if (input == "complete") input = "Complete";
+	if (input == "uncomplete") input = "Uncomplete";
+	if (input != "Complete" && input != "Uncomplete") {
+		std::cout << std::endl << "Invalid Status: Status is either complete or uncomplete" << std::endl;
+		input = initStatus;
+	}
+	
+
+}
 void removeWhiteSpace(std::string& s) {
 	s.erase(std::remove_if(s.begin(), s.end(), ::isspace), s.end());
 }
@@ -53,26 +79,21 @@ protected:
 	int priorityLvl;
 	std::string taskName;
 	std::string comment;
-	bool isComplete;
+	std::string status;
 
+	
 	friend std::ostream& operator<<(std::ostream& os, const Task& x);
-	std::string priority() const{
-		switch (priorityLvl) {
-		case 1: return "Low";
-		case 2: return "Medium";
-		case 3: return "High";
-		default: return "None";
-		}
-	}
-	std::string status() const {
-		return (isComplete) ? "Complete" : "Uncomplete";
-	}
+	
 public:
 
-	Task(std::string tn = "-------", int pl = 0, std::string c = "-------", bool ic = false) : taskName(tn), priorityLvl(pl), comment(c), isComplete(ic) {}
+	Task(std::string tn = "-------", int pl = 1, std::string c = "-------", std::string s = "Uncomplete") : taskName(tn), priorityLvl(pl), comment(c), status(s) {}
 
 	int getPriorityLvl() const{
 		return priorityLvl;
+	}
+	std::string getPriority() const {
+		std::unordered_map<int, std::string> priority = { {1, "Low"}, {2, "Medium"}, {3, "High"} };
+		return priority[priorityLvl];
 	}
 	std::string getTaskName() const{
 		return taskName;
@@ -80,15 +101,16 @@ public:
 	std::string getComment() const{
 		return comment;
 	}
-	bool getIsComplete() const{
-		return isComplete;
+	std::string getStatus() const{
+		return status;
 	}
 
-	void setIsComplete(const bool& isComplete) {
-		this->isComplete = isComplete;
+	void setStatus(const std::string& status) {
+		this->status = status;
 	}
-	void setPriorityLvl(const int& priorityLvl) {
-		this->priorityLvl = priorityLvl;
+	void setPriorityLvl(const std::string& priority) {
+		std::unordered_map<std::string, int> priorityLvl = { {"low", 1}, {"medium", 2}, {"high", 3} };
+		this->priorityLvl = priorityLvl[priority];
 	}
 	void setTaskName(const std::string& taskName) {
 		this->taskName = taskName;
@@ -130,13 +152,13 @@ public:
 
 std::ostream& operator<<(std::ostream& os, const Task& x) {
 	os << x.taskName << std::endl;
-	os << "   Priority: " << x.priority() << std::endl;
-	os << "   Status: " << x.status() << std::endl;
+	os << "   Priority: " << x.getPriority() << std::endl;
+	os << "   Status: " << x.status << std::endl;
 	os << "   Comment: " << x.comment << std::endl;
 	return os;
 }
 
-class TaskList{
+class TaskList {
 protected:
 	Date date;
 	std::unordered_map<std::string, Task> taskList;
@@ -154,40 +176,68 @@ public:
 		auto it = taskList.find(n);
 		return (it != taskList.end()) ? &it->second : nullptr;
 	}
+	bool taskExists(const std::string& n) {
+		return getTask(n);
+	}
 
 	void createTask(const std::string& n) {
-		if (getTask(n)) { 
-			std::cout << std::endl << "Task Already Exists!" << std::endl;
+		if (taskExists(n)) {
+			std::cout << std::endl << "List Already Exists!" << std::endl;
 		}
 		else {
 			Task task(n);
 			std::cout << std::endl << "Task Successfully Created!" << std::endl;
 			addTask(task);
 		}
-		
 	}
 	void openTaskEditor(const std::string& n) {
 		Task* t = getTask(n);
 		if (!t) {
-			std::cout << std::endl << "List Does Not Exist!" << std::endl;
+			std::cout << std::endl << "Task Does Not Exist!" << std::endl;
 			return;
 		}
 		while (true) {
 			int input;
+			std::string priority = t->getPriority();
 			std::string name;
+			std::string comment;
+			std::string status = t->getStatus();
 
 			t->displayTaskMenu();
+			std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
+			std::cout << "Enter a choice: ";
 			getIntegerInput(std::cin, input);
 
 
 			switch (input) {
 			case 1:
+				std::cout << std::endl;
+				std::cout << "Enter a priority level (high, medium or low): ";
+				getPriorityInput(std::cin, priority);
+				t->setPriorityLvl(priority);
 				break;
 			case 2:
+				std::cout << std::endl;
+				std::cout << "Rename task to: ";
+				getNameInput(std::cin, name);
+				if (!taskExists(name)) {
+					t->setTaskName(name);
+				}
+				else {
+					std::cout << std::endl << "Task Already Exists!" << std::endl;
+				}
 				break;
 			case 3:
+				std::cout << std::endl;
+				std::cout << "Write your comment here: ";
+				getline(std::cin, comment);
+				t->setComment(comment);
 				break;
 			case 4:
+				std::cout << std::endl;
+				std::cout << "Set status (complete/uncomplete): ";
+				getStatusInput(std::cin, status);
+				t->setStatus(status);
 				break;
 			case 5:
 				return;
@@ -200,8 +250,13 @@ public:
 		taskList.insert(std::pair<std::string, Task>(t.getTaskName(), t));
 	}
 	void removeTask(const std::string& n) {
-		taskList.erase(n);
-		std::cout << std::endl << "Task Successfully Removed!" << std::endl;
+		if (!taskExists(n)) {
+			std::cout << std::endl << "Task Does Not Exist!" << std::endl;
+		}
+		else {
+			taskList.erase(n);
+			std::cout << std::endl << "Task Successfully Removed!" << std::endl;
+		}
 	}
 
 	void displayTaskListMenu() const{
@@ -253,8 +308,13 @@ public:
 		auto it = taskLists.find(d);
 		return (it != taskLists.end()) ? &it->second : nullptr;
 	}
+	bool taskListExists(const Date& d) {
+		return getList(d);
+	}
 	void createList(const Date& d) {
-		if (getList(d)) {
+		if (!d.isValid()) return;
+
+		if (taskListExists(d)) {
 			std::cout << std::endl << "List Already Exists!" << std::endl;
 		}
 		else {
@@ -267,7 +327,9 @@ public:
 		taskLists.insert(std::pair<const Date, TaskList>(l.getDate(), l));
 	}
 	
-	void openList(const Date d) {
+	void openList(const Date& d) {
+		if (!d.isValid()) return;
+
 		TaskList* tl = getList(d);
 		if (!tl) {
 			std::cout << std::endl << "List Does Not Exist!" << std::endl; 
@@ -278,6 +340,8 @@ public:
 			std::string name;
 				
 			tl->displayTaskListMenu();
+			std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
+			std::cout << "Enter a choice: ";
 			getIntegerInput(std::cin, input);
 
 				
@@ -285,19 +349,19 @@ public:
 			case 1:
 				std::cout << std::endl;
 				std::cout << "Enter task name: ";
-				getTaskName(std::cin, name);
+				getNameInput(std::cin, name);
 				tl->createTask(name);
 				break;
 			case 2:
 				std::cout << std::endl;
 				std::cout << "Enter task name: ";
-				getTaskName(std::cin, name);
+				getNameInput(std::cin, name);
 				tl->removeTask(name);
 				break;
 			case 3:
 				std::cout << std::endl;
 				std::cout << "Enter task name: ";
-				getTaskName(std::cin, name);
+				getNameInput(std::cin, name);
 				tl->openTaskEditor(name);
 				break;
 			case 4:
@@ -309,8 +373,15 @@ public:
 	}
 
 	void removeList(const Date& d) {
-		taskLists.erase(d);
-		std::cout << std::endl << "List Successfully Removed!" << std::endl;
+		if (!d.isValid()) return;
+
+		if (!taskListExists(d)) {
+			std::cout << std::endl << "List Does Not Exist!" << std::endl;
+		}
+		else {
+			taskLists.erase(d);
+			std::cout << std::endl << "List Successfully Removed!" << std::endl;
+		}
 	}
 	void displayMenu() const {
 		std::cout <<
@@ -416,11 +487,11 @@ int main() {
 	std::cout << "========================================" << std::endl;
 
 	TaskList* taskList1 = new TaskList;
-	taskList1->addTask(Task("First Task", 1, "------", false));
-	taskList1->addTask(Task("Second Task", 3, "------", false));
-	taskList1->addTask(Task("Third Task", 2, "------", true));
-	taskList1->addTask(Task("Fourth Task", 1, "------", false));
-	taskList1->addTask(Task("Fifth Task", 3, "------", true));
+	taskList1->addTask(Task("First Task", 1, "------", "Uncomplete"));
+	taskList1->addTask(Task("Second Task", 3, "------", "Uncomplete"));
+	taskList1->addTask(Task("Third Task", 2, "------", "Complete"));
+	taskList1->addTask(Task("Fourth Task", 1, "------", "Uncomplete"));
+	taskList1->addTask(Task("Fifth Task", 3, "------", "Complete"));
 	std::cout << "========================================" << std::endl;
 	taskList1->displayTaskListMenu();
 	
@@ -437,6 +508,8 @@ int main() {
 		int input;
 		
 		todoListManager.displayMenu();
+		std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
+		std::cout << "Enter a choice: ";
 		getIntegerInput(std::cin, input);
 
 		std::cout << std::endl;
@@ -445,19 +518,19 @@ int main() {
 			std::cout << "What date would you like to access?" << std::endl;
 			std::cout << "Enter date: ";
 			getDateInput(std::cin, date);
-			if (date.isValid()) todoListManager.openList(date);
+			todoListManager.openList(date);
 			break;
 		case 2:
 			std::cout << "What date would you like to create a new list for?" << std::endl;
 			std::cout << "Enter date: ";
 			getDateInput(std::cin, date);
-			if (date.isValid()) todoListManager.createList(date);
+			todoListManager.createList(date);
 			break;
 		case 3: 
 			std::cout << "What date would you like to remove a list?" << std::endl;
 			std::cout << "Enter date: ";
 			getDateInput(std::cin, date);
-			if (date.isValid()) todoListManager.removeList(date);
+			todoListManager.removeList(date);
 			break;
 		case 4: 
 			running = false;
