@@ -2,9 +2,15 @@
 #include <vector>
 #include <algorithm>
 #include "Date.h"
+
 bool BothAreSpaces(char lhs, char rhs) {
 	return (lhs == rhs) && (lhs == ' ');
 }
+
+void removeWhiteSpace(std::string& s) {
+	s.erase(std::remove_if(s.begin(), s.end(), ::isspace), s.end());
+}
+
 void trim(std::string& s) {
 	s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
 		return !std::isspace(ch);
@@ -29,6 +35,7 @@ void getNameInput(std::istream& is, std::string& n) {
 	getline(is, n);
 	trim(n);
 }
+
 void getPriorityInput(std::istream& is, std::string& input) {
 	std::string initPrio = input;
 	getline(is, input);
@@ -39,8 +46,6 @@ void getPriorityInput(std::istream& is, std::string& input) {
 		std::cout << std::endl << "Invalid Priority: Priority is either high, medium or low" << std::endl;
 		input = initPrio;
 	}
-	
-
 }
 
 void getStatusInput(std::istream& is, std::string& input) {
@@ -55,12 +60,8 @@ void getStatusInput(std::istream& is, std::string& input) {
 		std::cout << std::endl << "Invalid Status: Status is either complete or uncomplete" << std::endl;
 		input = initStatus;
 	}
-	
+}
 
-}
-void removeWhiteSpace(std::string& s) {
-	s.erase(std::remove_if(s.begin(), s.end(), ::isspace), s.end());
-}
 void getDateInput(std::istream& is, Date& input) {
 	std::string s;
 	getline(is, s);
@@ -74,6 +75,8 @@ void getDateInput(std::istream& is, Date& input) {
 		input = Date();
 	}
 }
+
+
 class Task {
 protected:
 	int priorityLvl;
@@ -88,66 +91,25 @@ public:
 
 	Task(std::string tn = "-------", int pl = 1, std::string c = "-------", std::string s = "Uncomplete") : taskName(tn), priorityLvl(pl), comment(c), status(s) {}
 
-	int getPriorityLvl() const{
-		return priorityLvl;
-	}
-	std::string getPriority() const {
-		std::unordered_map<int, std::string> priority = { {1, "Low"}, {2, "Medium"}, {3, "High"} };
-		return priority[priorityLvl];
-	}
-	std::string getTaskName() const{
-		return taskName;
-	}
-	std::string getComment() const{
-		return comment;
-	}
-	std::string getStatus() const{
-		return status;
-	}
+	int getPriorityLvl() const;
+	std::string getPriority() const;
+	std::string getTaskName() const;
+	std::string getComment() const;
+	std::string getStatus() const;
 
-	void setStatus(const std::string& status) {
-		this->status = status;
-	}
-	void setPriorityLvl(const std::string& priority) {
-		std::unordered_map<std::string, int> priorityLvl = { {"low", 1}, {"medium", 2}, {"high", 3} };
-		this->priorityLvl = priorityLvl[priority];
-	}
-	void setTaskName(const std::string& taskName) {
-		this->taskName = taskName;
-	}
-	void setComment(const std::string& comment) {
-		this->comment = comment;
-	}
+	void setStatus(const std::string& status);
+	void setPriorityLvl(const std::string& priority);
+	void setTaskName(const std::string& taskName);
+	void setComment(const std::string& comment);
 	
-	bool operator<(const Task& t) const{
-		return priorityLvl < t.priorityLvl;
-	}
-	bool operator>(const Task& t) const{
-		return t < *this;
-	}
-	bool operator==(const Task& t) const {
-		return taskName == t.taskName;
-	}
-	void displayTask() const{
-		std::cout << *this << std::endl;
-	}
-	void displayTaskMenu() const{
-		std::cout <<
-		std::endl << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
-		std::cout << "             Edit Task               " << std::endl;
-		std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
-		displayTask();
-		std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
-		displayOptions();
-	}
+	bool operator<(const Task& t) const;
+	bool operator>(const Task& t) const;
+	bool operator==(const Task& t) const;
 
-	void displayOptions() const {
-		std::cout << "1. Priority Level" << std::endl;
-		std::cout << "2. Task Name" << std::endl;
-		std::cout << "3. Comment" << std::endl;
-		std::cout << "4. Status" << std::endl;
-		std::cout << "5. Go Back" << std::endl;
-	}
+	void displayTask() const;
+	void displayOptions() const;
+	void displayTaskMenu() const;
+	
 };
 
 std::ostream& operator<<(std::ostream& os, const Task& x) {
@@ -156,6 +118,67 @@ std::ostream& operator<<(std::ostream& os, const Task& x) {
 	os << "   Status: " << x.status << std::endl;
 	os << "   Comment: " << x.comment << std::endl;
 	return os;
+}
+
+int Task::getPriorityLvl() const {
+	return priorityLvl;
+}
+std::string Task::getPriority() const {
+	std::unordered_map<int, std::string> priority = { {1, "Low"}, {2, "Medium"}, {3, "High"} };
+	return priority[priorityLvl];
+}
+std::string Task::getTaskName() const {
+	return taskName;
+}
+std::string Task::getComment() const {
+	return comment;
+}
+std::string Task::getStatus() const {
+	return status;
+}
+
+void Task::setStatus(const std::string& status) {
+	this->status = status;
+}
+void Task::setPriorityLvl(const std::string& priority) {
+	std::unordered_map<std::string, int> priorityLvl = { {"low", 1}, {"medium", 2}, {"high", 3} };
+	this->priorityLvl = priorityLvl[priority];
+}
+void Task::setTaskName(const std::string& taskName) {
+	this->taskName = taskName;
+}
+void Task::setComment(const std::string& comment) {
+	this->comment = comment;
+}
+
+bool Task::operator<(const Task& t) const {
+	return priorityLvl < t.priorityLvl;
+}
+bool Task::operator>(const Task& t) const {
+	return t < *this;
+}
+bool Task::operator==(const Task& t) const {
+	return taskName == t.taskName;
+}
+void Task::displayTask() const {
+	std::cout << *this << std::endl;
+}
+void Task::displayTaskMenu() const {
+	std::cout <<
+		std::endl << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
+	std::cout << "             Edit Task               " << std::endl;
+	std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
+	displayTask();
+	std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
+	displayOptions();
+}
+
+void Task::displayOptions() const {
+	std::cout << "1. Priority Level" << std::endl;
+	std::cout << "2. Task Name" << std::endl;
+	std::cout << "3. Comment" << std::endl;
+	std::cout << "4. Status" << std::endl;
+	std::cout << "5. Go Back" << std::endl;
 }
 
 class TaskList {
@@ -182,7 +205,7 @@ public:
 
 	void createTask(const std::string& n) {
 		if (taskExists(n)) {
-			std::cout << std::endl << "List Already Exists!" << std::endl;
+			std::cout << std::endl << "Task Already Exists!" << std::endl;
 		}
 		else {
 			Task task(n);
@@ -190,6 +213,24 @@ public:
 			addTask(task);
 		}
 	}
+
+	void updateTaskName(Task* t, const std::string& n) {
+		if (taskExists(n)) {
+			std::cout << std::endl << "Task Already Exists!" << std::endl;
+			return;
+		}
+		t->setTaskName(n);
+	};
+	void updatePriority(Task* t, const std::string& p) {
+		t->setPriorityLvl(p);
+	};
+	void updateComment(Task* t, const std::string& c) {
+		t->setComment(c);
+	};
+	void updateStatus(Task* t, const std::string& s) {
+		t->setStatus(s);
+	};
+
 	void openTaskEditor(const std::string& n) {
 		Task* t = getTask(n);
 		if (!t) {
@@ -214,30 +255,25 @@ public:
 				std::cout << std::endl;
 				std::cout << "Enter a priority level (high, medium or low): ";
 				getPriorityInput(std::cin, priority);
-				t->setPriorityLvl(priority);
+				updatePriority(t, priority);
 				break;
 			case 2:
 				std::cout << std::endl;
 				std::cout << "Rename task to: ";
 				getNameInput(std::cin, name);
-				if (!taskExists(name)) {
-					t->setTaskName(name);
-				}
-				else {
-					std::cout << std::endl << "Task Already Exists!" << std::endl;
-				}
+				updateTaskName(t, name);
 				break;
 			case 3:
 				std::cout << std::endl;
 				std::cout << "Write your comment here: ";
 				getline(std::cin, comment);
-				t->setComment(comment);
+				updateComment(t, comment);
 				break;
 			case 4:
 				std::cout << std::endl;
 				std::cout << "Set status (complete/uncomplete): ";
 				getStatusInput(std::cin, status);
-				t->setStatus(status);
+				updateStatus(t, status);
 				break;
 			case 5:
 				return;
