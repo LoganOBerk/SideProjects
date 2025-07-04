@@ -1,36 +1,72 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="model">
+      <UniqueIdentifier>{faccffe3-bfae-4b50-be59-b3ddf59d989c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    <Filter Include="ui">
+      <UniqueIdentifier>{0741c6a4-69d6-4805-8820-170618d1cc8d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="utils">
+      <UniqueIdentifier>{0506b943-8dea-4cc9-888a-fcee1f7507f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="main">
+      <UniqueIdentifier>{f66bfabc-b581-428e-9654-5d89e60ae506}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Date.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="main\main.cpp">
+      <Filter>main</Filter>
     </ClCompile>
-    <ClCompile Include="Math.util.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="model\Date.cpp">
+      <Filter>model</Filter>
     </ClCompile>
-    <ClCompile Include="Task.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="model\Task.cpp">
+      <Filter>model</Filter>
+    </ClCompile>
+    <ClCompile Include="model\TaskList.cpp">
+      <Filter>model</Filter>
+    </ClCompile>
+    <ClCompile Include="model\TodoListApp.cpp">
+      <Filter>model</Filter>
+    </ClCompile>
+    <ClCompile Include="model\TodoListManager.cpp">
+      <Filter>model</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\UI.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\Math.util.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\String.util.cpp">
+      <Filter>utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Date.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="model\Date.h">
+      <Filter>model</Filter>
     </ClInclude>
-    <ClInclude Include="Math.util.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="model\Task.h">
+      <Filter>model</Filter>
+    </ClInclude>
+    <ClInclude Include="model\TaskList.h">
+      <Filter>model</Filter>
+    </ClInclude>
+    <ClInclude Include="model\TodoListApp.h">
+      <Filter>model</Filter>
+    </ClInclude>
+    <ClInclude Include="model\TodoListManager.h">
+      <Filter>model</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\UI.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Math.util.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\String.util.h">
+      <Filter>utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

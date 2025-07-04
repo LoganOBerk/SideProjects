@@ -1,6 +1,6 @@
 #include <iostream>
 #include <iomanip>
-#include "Date.h"
+#include "../model/Date.h"
 
 
 //INPUT: integers representing a m, month; d, day; y, year
@@ -16,6 +16,7 @@ Date::Date(int m, int d, int y) : month(m), day(d), year(y) {
 bool Date::isValid() const {
 	return day != 0 && month != 0 && year != 0;
 }
+
 // INPUT: None
 // OUTPUT: Integer representing the month of this Date
 // PRECONDITION: This Date object is valid and constructed
@@ -333,7 +334,7 @@ Date Date::operator--(int) {
 //PRECONDITION: Date is valid
 //POSTCONDITION: prints Date in "MonthName DD, YYYY" format
 std::ostream& operator<<(std::ostream& os, const Date& x) {
-	if (x != Date()) {
+	if (x.isValid()) {
 		std::string monthName[12] = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
 		os << monthName[x.month - 1] << ' ';
 		os << std::setw(2) << std::setfill('0') << x.day << ", ";
@@ -344,6 +345,13 @@ std::ostream& operator<<(std::ostream& os, const Date& x) {
 	}
 	return os;
 }
+
+std::string Date::toString(const Date& x) const{
+	std::ostringstream oss;
+	oss << *this;
+	return oss.str();
+}
+
 std::istream& operator>>(std::istream& is, Date& x) {
 	int m, d, y;
 	char delim1, delim2;

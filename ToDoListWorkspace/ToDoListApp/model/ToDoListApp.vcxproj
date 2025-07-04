@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{eef570a4-8a48-45de-ac51-763c95292c04}</ProjectGuid>
-    <RootNamespace>ToDoListApptests</RootNamespace>
+    <ProjectGuid>{5c9bb851-b313-455b-b23e-53a640f11c46}</ProjectGuid>
+    <RootNamespace>ToDoListApp</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -104,7 +104,6 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)ToDoListApp/main;$(SolutionDir)ToDoListApp/model;$(SolutionDir)ToDoListApp/ui;$(SolutionDir)ToDoListApp/utils</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -129,24 +128,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="test.cpp" />
+    <ClCompile Include="Date.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="String.util.cpp" />
+    <ClCompile Include="TodoListApp.cpp" />
+    <ClCompile Include="UI.cpp" />
+    <ClCompile Include="Math.util.cpp" />
+    <ClCompile Include="Task.cpp" />
+    <ClCompile Include="TaskList.cpp" />
+    <ClCompile Include="TodoListManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ToDoListApp\ToDoListApp.vcxproj">
-      <Project>{5c9bb851-b313-455b-b23e-53a640f11c46}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <ClInclude Include="Date.h" />
+    <ClInclude Include="Math.util.h" />
+    <ClInclude Include="String.util.h" />
+    <ClInclude Include="Task.h" />
+    <ClInclude Include="TaskList.h" />
+    <ClInclude Include="TodoListApp.h" />
+    <ClInclude Include="TodoListManager.h" />
+    <ClInclude Include="UI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1.7\build\native\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.targets" Condition="Exists('..\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1.7\build\native\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.targets')" />
   </ImportGroup>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1.7\build\native\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1.7\build\native\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.targets'))" />
-  </Target>
 </Project>
