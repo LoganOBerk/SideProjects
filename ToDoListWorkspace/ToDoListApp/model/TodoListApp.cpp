@@ -10,17 +10,17 @@ void TodoListApp::run() {
 
 		switch (input) {
 		case 1:
-			std::cout << "What date would you like to access?" << std::endl;
+			UI::listAccessPrompt();
 			UI::getDateInput(std::cin, date);
 			manager.openList(date);
 			break;
 		case 2:
-			std::cout << "What date would you like to create a new list for?" << std::endl;
+			UI::listCreationPrompt();
 			UI::getDateInput(std::cin, date);
 			manager.createList(date);
 			break;
 		case 3:
-			std::cout << "What date would you like to remove a list?" << std::endl;
+			UI::listRemovalPrompt();
 			UI::getDateInput(std::cin, date);
 			manager.removeList(date);
 			break;

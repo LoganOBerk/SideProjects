@@ -13,11 +13,11 @@ void TodoListManager::createList(const Date& d) {
 	if (!d.isValid()) return;
 
 	if (taskListExists(d)) {
-		std::cout << std::endl << "List Already Exists!" << std::endl;
+		UI::displayXAlreadyExists("List");
 	}
 	else {
 		TaskList taskList(d);
-		std::cout << std::endl << "List Successfully Created!" << std::endl;
+		UI::displaySuccessfulCreationOf("List");
 		taskLists.insert(std::pair<const Date, TaskList>(d, taskList));
 	}
 }
@@ -26,18 +26,18 @@ void TodoListManager::removeList(const Date& d) {
 	if (!d.isValid()) return;
 
 	if (!taskListExists(d)) {
-		std::cout << std::endl << "List Does Not Exist!" << std::endl;
+		UI::displayXDoesNotExist("List");
 	}
 	else {
 		taskLists.erase(d);
-		std::cout << std::endl << "List Successfully Removed!" << std::endl;
+		UI::displaySuccessfulRemovalOf("List");
 	}
 }
 
 void TodoListManager::openList(const Date& d) {
 	if (!d.isValid()) return;
 	if (!taskListExists(d)) {
-		std::cout << std::endl << "List Does Not Exist!" << std::endl;
+		UI::displayXDoesNotExist("List");
 		return;
 	}
 

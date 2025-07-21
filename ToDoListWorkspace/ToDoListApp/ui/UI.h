@@ -27,5 +27,14 @@ public:
 	static void displayTaskListMenu(TaskList& tl);
 	static void displayTodoListManagerMenu();
 
+	static void displayXAlreadyExists(const std::string& x);
+	static void displaySuccessfulCreationOf(const std::string& x);
+	static void displaySuccessfulRemovalOf(const std::string& x);
+	static void displayXDoesNotExist(const std::string& x);
+
+	static void listAccessPrompt();
+	static void listCreationPrompt();
+	static void listRemovalPrompt();
+
 
 };

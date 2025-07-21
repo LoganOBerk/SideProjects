@@ -115,3 +115,26 @@ void UI::displayTodoListManagerMenu(){
 	std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
 	std::cout << "Enter a choice (1-4): ";
 };
+
+void UI::displayXAlreadyExists(const std::string& x) {
+	std::cout << std::endl << x << " Already Exists!" << std::endl;
+}
+void UI::displaySuccessfulCreationOf(const std::string& x) {
+	std::cout << std::endl << x << " Successfully Created!" << std::endl;
+}
+void UI::displaySuccessfulRemovalOf(const std::string& x) {
+	std::cout << std::endl << x << " Successfully Removed!" << std::endl;
+}
+void UI::displayXDoesNotExist(const std::string& x) {
+	std::cout << std::endl << x << " Does Not Exist!" << std::endl;
+}
+
+void UI::listAccessPrompt(){
+	std::cout << "What list would you like to access?" << std::endl;
+}
+void UI::listCreationPrompt(){
+	std::cout << "What date would you like to create a new list for?" << std::endl;
+}
+void UI::listRemovalPrompt(){
+	std::cout << "What date would you like to remove a list?" << std::endl;
+}

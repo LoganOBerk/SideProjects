@@ -13,18 +13,18 @@ bool TaskList::taskExists(const std::string& n) {
 
 void TaskList::createTask(const std::string& n) {
 	if (taskExists(n)) {
-		std::cout << std::endl << "Task Already Exists!" << std::endl;
+		UI::displayXAlreadyExists("Task");
 	}
 	else {
 		Task task(n);
-		std::cout << std::endl << "Task Successfully Created!" << std::endl;
+		UI::displaySuccessfulCreationOf("Task");
 		addTask(task);
 	}
 }
 
 void TaskList::updateTaskName(Task* t, const std::string& n) {
 	if (taskExists(n)) {
-		std::cout << std::endl << "Task Already Exists!" << std::endl;
+		UI::displayXAlreadyExists("Task");
 		return;
 	}
 	t->setTaskName(n);
@@ -42,7 +42,7 @@ void TaskList::updateStatus(Task* t, const std::string& s) {
 void TaskList::openTaskEditor(const std::string& n) {
 	Task* t = getTask(n);
 	if (!t) {
-		std::cout << std::endl << "Task Does Not Exist!" << std::endl;
+		UI::displayXDoesNotExist("Task");
 		return;
 	}
 	while (true) {
@@ -84,11 +84,11 @@ void TaskList::addTask(const Task& t) {
 }
 void TaskList::removeTask(const std::string& n) {
 	if (!taskExists(n)) {
-		std::cout << std::endl << "Task Does Not Exist!" << std::endl;
+		UI::displayXDoesNotExist("Task");
 	}
 	else {
 		taskList.erase(n);
-		std::cout << std::endl << "Task Successfully Removed!" << std::endl;
+		UI::displaySuccessfulRemovalOf("Task");
 	}
 }
 bool TaskList::isEmpty() const{

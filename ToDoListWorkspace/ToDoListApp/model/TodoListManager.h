@@ -14,7 +14,6 @@ public:
 	TaskList* getList(const Date& d);
 	bool taskListExists(const Date& d);
 	void createList(const Date& d);
-	void addList(const TaskList& l);
 
 	void openList(const Date& d);
 	void removeList(const Date& d);
