@@ -17,9 +17,7 @@ std::ostream& operator<<(std::ostream& os, const Task& x) {
 const std::unordered_map<int, std::string> Task::intToPriority = { {1, "low"}, {2, "medium"}, {3, "high"} };
 const std::unordered_map<std::string, int> Task::priorityToInt = { {"low", 1}, {"medium", 2}, {"high", 3} };
 
-int Task::getPriorityLvl() const {
-	return priorityLvl;
-}
+
 std::string Task::getPriority() const {
 	return intToPriority.at(priorityLvl);
 }

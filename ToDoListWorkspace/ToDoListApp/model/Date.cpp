@@ -346,12 +346,6 @@ std::ostream& operator<<(std::ostream& os, const Date& x) {
 	return os;
 }
 
-std::string Date::toString(const Date& x) const{
-	std::ostringstream oss;
-	oss << *this;
-	return oss.str();
-}
-
 std::istream& operator>>(std::istream& is, Date& x) {
 	int m, d, y;
 	char delim1, delim2;

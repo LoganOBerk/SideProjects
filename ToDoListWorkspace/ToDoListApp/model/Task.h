@@ -20,7 +20,6 @@ public:
 
 	Task(std::string tn = "-------", int pl = 1, std::string c = "-------", std::string s = "Uncomplete") : taskName(tn), priorityLvl(pl), comment(c), status(s) {}
 
-	int getPriorityLvl() const;
 	std::string getPriority() const;
 	std::string getTaskName() const;
 	std::string getComment() const;
