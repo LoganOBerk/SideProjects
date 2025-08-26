@@ -4,37 +4,33 @@
 #include <iostream>
 #include <algorithm>
 
-#include "Date.h"
-#include "Task.h"
-#include "TaskList.h"
-#include "String.util.h"
-
-class Task;
 class TaskList;
+class Task;
+class Date;
 
 class UI {
 public:
-	static void welcomeMenu();
+    // Menus
+    static void welcomeMenu();
+    static void displayTaskEditorMenu(Task& t);
+    static void displayTaskListMenu(TaskList& tl);
+    static void displayTodoListManagerMenu();
 
-	static void getIntegerInput(std::istream& is, int& input, const int lower, const int upper);
-	static void getNameInput(std::istream& is, std::string& n);
-	static void getPriorityInput(std::istream& is, std::string& input);
-	static void getStatusInput(std::istream& is, std::string& input);
-	static void getDateInput(std::istream& is, Date& input);
-	static void getCommentInput(std::istream& is, std::string& input);
+    // Input handlers
+    static void getIntegerInput(std::istream& is, int& input, int lower, int upper);
+    static void getNameInput(std::istream& is, std::string& name);
+    static void getPriorityInput(std::istream& is, std::string& priority);
+    static void getStatusInput(std::istream& is, std::string& status);
+    static void getDateInput(std::istream& is, Date& date);
+    static void getCommentInput(std::istream& is, std::string& comment);
 
-	static void displayTaskEditorMenu(Task& t);
-	static void displayTaskListMenu(TaskList& tl);
-	static void displayTodoListManagerMenu();
+    // Messages and prompts
+    static void displayXAlreadyExists(const std::string& x);
+    static void displaySuccessfulCreationOf(const std::string& x);
+    static void displaySuccessfulRemovalOf(const std::string& x);
+    static void displayXDoesNotExist(const std::string& x);
 
-	static void displayXAlreadyExists(const std::string& x);
-	static void displaySuccessfulCreationOf(const std::string& x);
-	static void displaySuccessfulRemovalOf(const std::string& x);
-	static void displayXDoesNotExist(const std::string& x);
-
-	static void listAccessPrompt();
-	static void listCreationPrompt();
-	static void listRemovalPrompt();
-
-
+    static void listAccessPrompt();
+    static void listCreationPrompt();
+    static void listRemovalPrompt();
 };

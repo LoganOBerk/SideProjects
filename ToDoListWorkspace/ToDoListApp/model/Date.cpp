@@ -13,8 +13,48 @@ Date::Date(int m, int d, int y) : month(m), day(d), year(y) {
 	if (daysInMonth(m, y) < d) throw std::invalid_argument("Invalid number of days for month");
 }
 
+//INPUT: os, output stream; x, Date to print
+//OUTPUT: formatted output to stream
+//PRECONDITION: Date is valid
+//POSTCONDITION: prints Date in "MonthName DD, YYYY" format
+std::ostream& operator<<(std::ostream& os, const Date& x) {
+	if (x.isValid()) {
+		std::string monthName[12] = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
+		os << monthName[x.month - 1] << ' ';
+		os << std::setw(2) << std::setfill('0') << x.day << ", ";
+		os << std::setw(4) << std::setfill('0') << x.year;
+	}
+	else {
+		os << "NAN";
+	}
+	return os;
+}
+
+std::istream& operator>>(std::istream& is, Date& x) {
+	int m, d, y;
+	char delim1, delim2;
+	is >> m >> delim1 >> d >> delim2 >> y;
+
+	if (delim1 != delim2 || (delim1 != '/' && delim1 != '-')) {
+		is.setstate(std::ios::failbit);
+	}
+
+	try {
+		x = Date(m, d, y);
+	}
+	catch (const std::invalid_argument&) {
+		is.setstate(std::ios::failbit);
+	}
+
+	return is;
+}
+
 bool Date::isValid() const {
 	return day != 0 && month != 0 && year != 0;
+}
+
+std::string Date::toString() const {
+	return std::to_string(month) + "/" + std::to_string(day) + "/" + std::to_string(year);
 }
 
 // INPUT: None
@@ -329,47 +369,7 @@ Date Date::operator--(int) {
 	return cur;
 }
 
-//INPUT: os, output stream; x, Date to print
-//OUTPUT: formatted output to stream
-//PRECONDITION: Date is valid
-//POSTCONDITION: prints Date in "MonthName DD, YYYY" format
-std::ostream& operator<<(std::ostream& os, const Date& x) {
-	if (x.isValid()) {
-		std::string monthName[12] = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
-		os << monthName[x.month - 1] << ' ';
-		os << std::setw(2) << std::setfill('0') << x.day << ", ";
-		os << std::setw(4) << std::setfill('0') << x.year;
-	}
-	else {
-		os << "NAN";
-	}
-	return os;
-}
 
-std::istream& operator>>(std::istream& is, Date& x) {
-	int m, d, y;
-	char delim1, delim2;
-	is >> m >> delim1 >> d >> delim2 >> y;
 
-	if (delim1 != delim2 || (delim1 != '/' && delim1 != '-')) {
-		is.setstate(std::ios::failbit);
-	}
-	
-	try {
-		x = Date(m, d, y);
-	}
-	catch (const std::invalid_argument&) {
-		is.setstate(std::ios::failbit);
-	}
 
-	return is;
-}
-
-//INPUT: none
-//OUTPUT: formatted Date to standard output
-//PRECONDITION: Date is valid
-//POSTCONDITION: displays Date using operator<<
-void Date::printDate() const{
-	std::cout << *this << std::endl;
-}
 

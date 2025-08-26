@@ -1,44 +1,24 @@
 #include "TaskList.h"
-
-Date TaskList::getDate() const {
-	return date;
-}
-Task* TaskList::getTask(const std::string& n) {
-	auto it = taskList.find(n);
-	return (it != taskList.end()) ? &it->second : nullptr;
-}
-bool TaskList::taskExists(const std::string& n) {
-	return getTask(n);
-}
-
-void TaskList::createTask(const std::string& n) {
-	if (taskExists(n)) {
-		UI::displayXAlreadyExists("Task");
+void TaskList::serialize(std::ostream& out) const {
+	out << date.toString() << std::endl;
+	for (const auto& kv : taskList) {
+		kv.second.serialize(out);
 	}
-	else {
-		Task task(n);
-		UI::displaySuccessfulCreationOf("Task");
-		addTask(task);
-	}
+	out << '\n';
 }
+void TaskList::deserialize(std::istream& in) {
+	std::string d;
+	std::getline(in, d);
+	std::istringstream iss(d);
+	iss >> date;
 
-void TaskList::updateTaskName(Task* t, const std::string& n) {
-	if (taskExists(n)) {
-		UI::displayXAlreadyExists("Task");
-		return;
+	while (in.peek() != '\n') {
+		Task t;
+		t.deserialize(in);
+		addTask(t);
 	}
-	t->setTaskName(n);
-};
-void TaskList::updatePriority(Task* t, const std::string& p) {
-	t->setPriorityLvl(p);
-};
-void TaskList::updateComment(Task* t, const std::string& c) {
-	t->setComment(c);
-};
-void TaskList::updateStatus(Task* t, const std::string& s) {
-	t->setStatus(s);
-};
-
+	in.ignore();
+}
 void TaskList::openTaskEditor(const std::string& n) {
 	Task* t = getTask(n);
 	if (!t) {
@@ -79,9 +59,35 @@ void TaskList::openTaskEditor(const std::string& n) {
 		}
 	};
 }
+
+Date TaskList::getDate() const {
+	return date;
+}
+
+Task* TaskList::getTask(const std::string& n) {
+	auto it = taskList.find(n);
+	return (it != taskList.end()) ? &it->second : nullptr;
+}
+
+bool TaskList::taskExists(const std::string& n) {
+	return getTask(n);
+}
+
 void TaskList::addTask(const Task& t) {
 	taskList.insert(std::pair<std::string, Task>(t.getTaskName(), t));
 }
+
+void TaskList::createTask(const std::string& n) {
+	if (taskExists(n)) {
+		UI::displayXAlreadyExists("Task");
+	}
+	else {
+		Task task(n);
+		UI::displaySuccessfulCreationOf("Task");
+		addTask(task);
+	}
+}
+
 void TaskList::removeTask(const std::string& n) {
 	if (!taskExists(n)) {
 		UI::displayXDoesNotExist("Task");
@@ -91,6 +97,23 @@ void TaskList::removeTask(const std::string& n) {
 		UI::displaySuccessfulRemovalOf("Task");
 	}
 }
+void TaskList::updateTaskName(Task* t, const std::string& n) {
+	if (taskExists(n)) {
+		UI::displayXAlreadyExists("Task");
+		return;
+	}
+	t->setTaskName(n);
+};
+void TaskList::updatePriority(Task* t, const std::string& p) {
+	t->setPriority(p);
+};
+void TaskList::updateComment(Task* t, const std::string& c) {
+	t->setComment(c);
+};
+void TaskList::updateStatus(Task* t, const std::string& s) {
+	t->setStatus(s);
+};
+
 bool TaskList::isEmpty() const{
 	return taskList.empty();
 }

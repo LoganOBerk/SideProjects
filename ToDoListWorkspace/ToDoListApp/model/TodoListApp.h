@@ -5,7 +5,11 @@
 
 class TodoListApp {
 private:
-	TodoListManager manager;
+    TodoListManager manager;
+
 public:
-	void run();
+    // Main application loop
+    void init();
+    void run();
+    void exit();
 };

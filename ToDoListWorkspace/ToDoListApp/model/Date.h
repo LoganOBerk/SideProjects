@@ -60,13 +60,12 @@
 		Date() : month(0), day(0), year(0) {}
 		Date(int m, int d, int y);
 
-		// Output and utility
-		void printDate() const;
+		// Utility
 		int getMonth() const;
 		int getDay() const;
 		int getYear() const;
 		bool isValid() const;
-		std::string toString(const Date&) const;
+		std::string toString() const;
 
 		// Comparison operators
 		bool operator<(const Date&) const;

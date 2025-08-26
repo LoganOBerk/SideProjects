@@ -2,36 +2,47 @@
 
 #include <unordered_map>
 #include <string>
+#include <ostream>
 #include "UI.h"
 
 class Task {
 private:
-	static const std::unordered_map<int, std::string> intToPriority;
-	static const std::unordered_map<std::string, int> priorityToInt;
-protected:
-	int priorityLvl;
-	std::string taskName;
-	std::string comment;
-	std::string status;
+    static std::unordered_map<std::string, int> priorityLvl;
 
-	friend std::ostream& operator<<(std::ostream& os, const Task& x);
+protected:
+    std::string priority;
+    std::string taskName;
+    std::string comment;
+    std::string status;
+
+    // Allow stream output of Task objects
+    friend std::ostream& operator<<(std::ostream& os, const Task& x);
 
 public:
+    // Constructor with default values
+    Task(std::string tn = "-------",
+        std::string p = "low",
+        std::string c = "-------",
+        std::string s = "Uncomplete")
+        : taskName(tn), priority(p), comment(c), status(s) {
+    }
 
-	Task(std::string tn = "-------", int pl = 1, std::string c = "-------", std::string s = "Uncomplete") : taskName(tn), priorityLvl(pl), comment(c), status(s) {}
+    // Getters
+    std::string getPriority() const;
+    std::string getTaskName() const;
+    std::string getComment() const;
+    std::string getStatus() const;
 
-	std::string getPriority() const;
-	std::string getTaskName() const;
-	std::string getComment() const;
-	std::string getStatus() const;
+    // Setters
+    void setStatus(const std::string& s);
+    void setPriority(const std::string& p);
+    void setTaskName(const std::string& tn);
+    void setComment(const std::string& c);
 
-	void setStatus(const std::string& status);
-	void setPriorityLvl(const std::string& priority);
-	void setTaskName(const std::string& taskName);
-	void setComment(const std::string& comment);
-
-	bool operator<(const Task& t) const;
-	bool operator>(const Task& t) const;
-	bool operator==(const Task& t) const;
+    void serialize(std::ostream& out) const;
+    void deserialize(std::istream& in);
+    // Comparison operators based on priority or other logic
+    bool operator<(const Task& t) const;
+    bool operator>(const Task& t) const;
+    bool operator==(const Task& t) const;
 };
-

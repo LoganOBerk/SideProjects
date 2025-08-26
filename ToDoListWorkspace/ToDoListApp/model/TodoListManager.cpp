@@ -1,12 +1,27 @@
 #include "TodoListManager.h"
 
-
+void TodoListManager::serialize(std::ostream& out) const {
+	for (const auto& kv : taskLists) {
+		kv.second.serialize(out);
+	}
+}
+void TodoListManager::deserialize(std::istream& in) {
+	while (in.peek() != std::char_traits<char>::eof()) {
+		TaskList tl;
+		tl.deserialize(in);
+		addTaskList(tl);
+	}
+}
 TaskList* TodoListManager::getList(const Date& d) {
 	auto it = taskLists.find(d);
 	return (it != taskLists.end()) ? &it->second : nullptr;
 }
 bool TodoListManager::taskListExists(const Date& d) {
 	return getList(d);
+}
+
+void TodoListManager::addTaskList(const TaskList& tl) {
+	taskLists.insert(std::pair<const Date, TaskList>(tl.getDate(), tl));
 }
 
 void TodoListManager::createList(const Date& d) {
@@ -18,7 +33,7 @@ void TodoListManager::createList(const Date& d) {
 	else {
 		TaskList taskList(d);
 		UI::displaySuccessfulCreationOf("List");
-		taskLists.insert(std::pair<const Date, TaskList>(d, taskList));
+		addTaskList(taskList);
 	}
 }
 
@@ -36,6 +51,7 @@ void TodoListManager::removeList(const Date& d) {
 
 void TodoListManager::openList(const Date& d) {
 	if (!d.isValid()) return;
+
 	if (!taskListExists(d)) {
 		UI::displayXDoesNotExist("List");
 		return;

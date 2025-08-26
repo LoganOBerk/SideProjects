@@ -1,50 +1,50 @@
 #pragma once
 
-#include "UI.h"
 #include "Task.h"
 #include "Date.h"
 #include "String.util.h"
-
-class Task;
+#include "UI.h"
+#include <unordered_map>
+#include <string>
+#include <ostream>
 
 class TaskList {
-private:
-	struct CaseInsensitiveHash {
-		size_t operator()(const std::string& s) const {
-			return std::hash<std::string>()(toLower(s));
-		}
-	};
-
-	struct CaseInsensitiveEqual {
-		bool operator()(const std::string& a, const std::string& b) const {
-			return toLower(a) == toLower(b);
-		}
-	};
 protected:
-	Date date;
-	std::unordered_map<std::string, Task, CaseInsensitiveHash, CaseInsensitiveEqual> taskList;
-	friend std::ostream& operator<<(std::ostream& os, const TaskList& x);;
+    Date date;
+    std::unordered_map<std::string, Task, CaseInsensitiveHash, CaseInsensitiveEqual> taskList;
+
+    // Allow streaming of TaskList objects
+    friend std::ostream& operator<<(std::ostream& os, const TaskList& x);
 
 public:
-	TaskList() {}
-	TaskList(Date d) : date(d) {}
+    // Constructors
+    TaskList() = default;
+    explicit TaskList(const Date& d) : date(d) {}
 
-	Date getDate() const;
-	Task* getTask(const std::string& n);
-	bool taskExists(const std::string& n);
+    // Accessors
+    Date getDate() const;
+    Task* getTask(const std::string& name);
+    bool taskExists(const std::string& name);
 
-	void createTask(const std::string& n);
+    // Modifiers
+    void createTask(const std::string& name);
+    void addTask(const Task& task);
+    void removeTask(const std::string& name);
 
-	void updateTaskName(Task* t, const std::string& n);
-	void updatePriority(Task* t, const std::string& p);
-	void updateComment(Task* t, const std::string& c);
-	void updateStatus(Task* t, const std::string& s);
-	bool isEmpty() const;
-	void openTaskEditor(const std::string& n);
-	void addTask(const Task& t);
-	void removeTask(const std::string& n);
+    void updateTaskName(Task* task, const std::string& newName);
+    void updatePriority(Task* task, const std::string& newPriority);
+    void updateComment(Task* task, const std::string& newComment);
+    void updateStatus(Task* task, const std::string& newStatus);
 
-	bool operator<(const TaskList& t) const;
-	bool operator>(const TaskList& t) const;
-	bool operator==(const TaskList& t) const;
+    // Utility
+    bool isEmpty() const;
+    void openTaskEditor(const std::string& name);
+
+    void serialize(std::ostream& out) const;
+    void deserialize(std::istream& in);
+
+    // Comparison operators
+    bool operator<(const TaskList& other) const;
+    bool operator>(const TaskList& other) const;
+    bool operator==(const TaskList& other) const;
 };

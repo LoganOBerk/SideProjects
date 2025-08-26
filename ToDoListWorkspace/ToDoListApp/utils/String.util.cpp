@@ -20,3 +20,4 @@ void trim(std::string& s) {
 	std::string::iterator new_end = std::unique(s.begin(), s.end(), BothAreSpaces);
 	s.erase(new_end, s.end());
 }
+

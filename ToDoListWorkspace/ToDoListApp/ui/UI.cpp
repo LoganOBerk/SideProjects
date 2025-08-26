@@ -1,4 +1,8 @@
 #include "UI.h"
+#include "Date.h"
+#include "Task.h"
+#include "TaskList.h"
+#include "String.util.h"
 
 void UI::welcomeMenu() {
 	std::cout << std::endl; std::cout << std::endl;
@@ -35,7 +39,7 @@ void UI::getPriorityInput(std::istream& is, std::string& input) {
 	std::string initPrio = input;
 	getline(is, input);
 	trim(input);
-	toLower(input);
+	input = toLower(input);
 	if (input != "high" && input != "medium" && input != "low") {
 		std::cout << std::endl << "Invalid Priority: Priority is either high, medium or low" << std::endl;
 		input = initPrio;
@@ -111,7 +115,7 @@ void UI::displayTodoListManagerMenu(){
 	std::cout << "1. Open List" << std::endl;
 	std::cout << "2. Create List" << std::endl;
 	std::cout << "3. Remove List" << std::endl;
-	std::cout << "4. Exit" << std::endl;
+	std::cout << "4. Save & Exit" << std::endl;
 	std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
 	std::cout << "Enter a choice (1-4): ";
 };
