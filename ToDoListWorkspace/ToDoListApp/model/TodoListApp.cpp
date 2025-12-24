@@ -2,11 +2,20 @@
 
 #include <fstream>
 
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void TodoListApp::init(){
 	std::fstream file("app_data.txt", std::ios::in);
 	manager.deserialize(file);
 	file.close();
 }
+
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void TodoListApp::run() {
 	UI::welcomeMenu();
 	while (true) {
@@ -37,6 +46,11 @@ void TodoListApp::run() {
 		}
 	}
 }
+
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void TodoListApp::exit() {
 	std::fstream file("app_data.txt", std::ios::out | std::ios::trunc);
 	manager.serialize(file);

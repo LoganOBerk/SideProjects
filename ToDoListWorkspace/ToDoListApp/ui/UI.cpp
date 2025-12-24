@@ -4,6 +4,10 @@
 #include "TaskList.h"
 #include "String.util.h"
 
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void UI::welcomeMenu() {
 	std::cout << std::endl; std::cout << std::endl;
 	std::cout << "=====================================" << std::endl;
@@ -12,6 +16,10 @@ void UI::welcomeMenu() {
 	std::cout << std::endl;
 }
 
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void UI::getIntegerInput(std::istream& is, int& input, const int lower, const int upper) {
 	is >> input;
 	std::cout << std::endl;
@@ -24,16 +32,29 @@ void UI::getIntegerInput(std::istream& is, int& input, const int lower, const in
 	
 }
 
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void UI::getNameInput(std::istream& is, std::string& n) {
 	std::cout << "Enter a task name: ";
 	getline(is, n);
 	trim(n);
 }
 
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void UI::getCommentInput(std::istream& is, std::string& input) {
 	std::cout << "Write your comment here: ";
 	getline(is , input);
 }
+
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void UI::getPriorityInput(std::istream& is, std::string& input) {
 	std::cout << "Enter a priority level (high, medium or low): ";
 	std::string initPrio = input;
@@ -46,6 +67,10 @@ void UI::getPriorityInput(std::istream& is, std::string& input) {
 	}
 }
 
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void UI::getStatusInput(std::istream& is, std::string& input) {
 	std::cout << "Set status (complete/uncomplete): ";
 	std::string initStatus = input;
@@ -60,6 +85,10 @@ void UI::getStatusInput(std::istream& is, std::string& input) {
 	}
 }
 
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void UI::getDateInput(std::istream& is, Date& input) {
 	std::cout << "Enter date: ";
 	std::string s;
@@ -74,6 +103,10 @@ void UI::getDateInput(std::istream& is, Date& input) {
 	}
 }
 
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void UI::displayTaskEditorMenu(Task& t){
 	std::cout <<
 	std::endl << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
@@ -89,6 +122,11 @@ void UI::displayTaskEditorMenu(Task& t){
 	std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
 	std::cout << "Enter a choice (1-5): ";
 };
+
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void UI::displayTaskListMenu(TaskList& tl){
 	std::cout << std::endl;
 	std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
@@ -107,6 +145,11 @@ void UI::displayTaskListMenu(TaskList& tl){
 	std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
 	std::cout << "Enter a choice (1-4): ";
 };
+
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void UI::displayTodoListManagerMenu(){
 	std::cout <<
 	std::endl << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
@@ -120,25 +163,58 @@ void UI::displayTodoListManagerMenu(){
 	std::cout << "Enter a choice (1-4): ";
 };
 
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void UI::displayXAlreadyExists(const std::string& x) {
 	std::cout << std::endl << x << " Already Exists!" << std::endl;
 }
+
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void UI::displaySuccessfulCreationOf(const std::string& x) {
 	std::cout << std::endl << x << " Successfully Created!" << std::endl;
 }
+
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void UI::displaySuccessfulRemovalOf(const std::string& x) {
 	std::cout << std::endl << x << " Successfully Removed!" << std::endl;
 }
+
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void UI::displayXDoesNotExist(const std::string& x) {
 	std::cout << std::endl << x << " Does Not Exist!" << std::endl;
 }
 
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void UI::listAccessPrompt(){
 	std::cout << "What list would you like to access?" << std::endl;
 }
+
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void UI::listCreationPrompt(){
 	std::cout << "What date would you like to create a new list for?" << std::endl;
 }
+
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void UI::listRemovalPrompt(){
 	std::cout << "What date would you like to remove a list?" << std::endl;
 }
