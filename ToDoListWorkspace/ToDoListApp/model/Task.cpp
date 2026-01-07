@@ -111,7 +111,10 @@ void Task::setComment(const std::string& c) {
 //PRECONDITION: 
 //POSTCONDITION: 
 bool Task::operator<(const Task& t) const{
-	return priorityLvl[priority] < priorityLvl[t.priority];
+	if (priorityLvl[priority] != priorityLvl[t.priority])
+		return priorityLvl[priority] < priorityLvl[t.priority];
+
+	return taskName < t.taskName;
 }
 
 //INPUT: 
