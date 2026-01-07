@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <algorithm>
+#include <sstream>
 
 class TaskList;
 class Task;

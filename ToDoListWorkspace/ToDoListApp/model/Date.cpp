@@ -1,6 +1,6 @@
 #include <iostream>
 #include <iomanip>
-#include "../model/Date.h"
+#include "Date.h"
 
 
 //INPUT: integers representing a m, month; d, day; y, year

@@ -2,6 +2,7 @@
 
 #include <unordered_map>
 #include <string>
+#include <fstream>
 #include <ostream>
 #include "UI.h"
 
