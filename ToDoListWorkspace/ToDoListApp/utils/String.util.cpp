@@ -1,5 +1,9 @@
 #include "String.util.h"
 
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 std::string toLower(const std::string& s) {
 	std::string result = s;
 	std::transform(result.begin(), result.end(), result.begin(),
@@ -7,9 +11,18 @@ std::string toLower(const std::string& s) {
 	return result;
 }
 
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 bool BothAreSpaces(char lhs, char rhs) {
 	return (lhs == rhs) && (lhs == ' ');
 }
+
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void trim(std::string& s) {
 	s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
 		return !std::isspace(ch);

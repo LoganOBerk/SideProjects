@@ -1,5 +1,10 @@
 #include "TaskList.h"
 #include <sstream>
+
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void TaskList::serialize(std::ostream& out) const {
 	out << date.toString() << std::endl;
 	for (const auto& kv : taskList) {
@@ -7,6 +12,11 @@ void TaskList::serialize(std::ostream& out) const {
 	}
 	out << '\n';
 }
+
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void TaskList::deserialize(std::istream& in) {
 	std::string d;
 	std::getline(in, d);
@@ -20,6 +30,11 @@ void TaskList::deserialize(std::istream& in) {
 	}
 	in.ignore();
 }
+
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void TaskList::openTaskEditor(const std::string& n) {
 	Task* t = getTask(n);
 	if (!t) {
@@ -61,23 +76,43 @@ void TaskList::openTaskEditor(const std::string& n) {
 	};
 }
 
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 Date TaskList::getDate() const {
 	return date;
 }
 
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 Task* TaskList::getTask(const std::string& n) {
 	auto it = taskList.find(n);
 	return (it != taskList.end()) ? &it->second : nullptr;
 }
 
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 bool TaskList::taskExists(const std::string& n) {
 	return getTask(n);
 }
 
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void TaskList::addTask(const Task& t) {
 	taskList.insert(std::pair<std::string, Task>(t.getTaskName(), t));
 }
 
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void TaskList::createTask(const std::string& n) {
 	if (taskExists(n)) {
 		UI::displayXAlreadyExists("Task");
@@ -89,6 +124,10 @@ void TaskList::createTask(const std::string& n) {
 	}
 }
 
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void TaskList::removeTask(const std::string& n) {
 	if (!taskExists(n)) {
 		UI::displayXDoesNotExist("Task");
@@ -98,6 +137,11 @@ void TaskList::removeTask(const std::string& n) {
 		UI::displaySuccessfulRemovalOf("Task");
 	}
 }
+
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void TaskList::updateTaskName(Task* t, const std::string& n) {
 	if (taskExists(n)) {
 		UI::displayXAlreadyExists("Task");
@@ -105,29 +149,67 @@ void TaskList::updateTaskName(Task* t, const std::string& n) {
 	}
 	t->setTaskName(n);
 };
+
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void TaskList::updatePriority(Task* t, const std::string& p) {
 	t->setPriority(p);
 };
+
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void TaskList::updateComment(Task* t, const std::string& c) {
 	t->setComment(c);
 };
+
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void TaskList::updateStatus(Task* t, const std::string& s) {
 	t->setStatus(s);
 };
 
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 bool TaskList::isEmpty() const{
 	return taskList.empty();
 }
+
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 bool TaskList::operator<(const TaskList& t) const {
 	return date < t.date;
 }
+
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 bool TaskList::operator>(const TaskList& t) const {
 	return t < *this;
 }
+
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 bool TaskList::operator==(const TaskList& t) const {
 	return date == t.date;
 }
 
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 std::ostream& operator<<(std::ostream& os, const TaskList& x) {
 	std::vector<Task> sortedTaskList;
 	for (const auto& pair : x.taskList) {

@@ -31,6 +31,10 @@ std::ostream& operator<<(std::ostream& os, const Date& x) {
 	return os;
 }
 
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 std::istream& operator>>(std::istream& is, Date& x) {
 	int m, d, y;
 	char delim1, delim2;
@@ -50,10 +54,18 @@ std::istream& operator>>(std::istream& is, Date& x) {
 	return is;
 }
 
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 bool Date::isValid() const {
 	return day != 0 && month != 0 && year != 0;
 }
 
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 std::string Date::toString() const {
 	return std::to_string(month) + "/" + std::to_string(day) + "/" + std::to_string(year);
 }

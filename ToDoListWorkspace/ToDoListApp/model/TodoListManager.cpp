@@ -1,10 +1,19 @@
 #include "TodoListManager.h"
 
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void TodoListManager::serialize(std::ostream& out) const {
 	for (const auto& kv : taskLists) {
 		kv.second.serialize(out);
 	}
 }
+
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void TodoListManager::deserialize(std::istream& in) {
 	while (in.peek() != std::char_traits<char>::eof()) {
 		TaskList tl;
@@ -12,18 +21,36 @@ void TodoListManager::deserialize(std::istream& in) {
 		addTaskList(tl);
 	}
 }
+
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 TaskList* TodoListManager::getList(const Date& d) {
 	auto it = taskLists.find(d);
 	return (it != taskLists.end()) ? &it->second : nullptr;
 }
+
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 bool TodoListManager::taskListExists(const Date& d) {
 	return getList(d);
 }
 
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void TodoListManager::addTaskList(const TaskList& tl) {
 	taskLists.insert(std::pair<const Date, TaskList>(tl.getDate(), tl));
 }
 
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void TodoListManager::createList(const Date& d) {
 	if (!d.isValid()) return;
 
@@ -37,6 +64,10 @@ void TodoListManager::createList(const Date& d) {
 	}
 }
 
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void TodoListManager::removeList(const Date& d) {
 	if (!d.isValid()) return;
 
@@ -49,6 +80,10 @@ void TodoListManager::removeList(const Date& d) {
 	}
 }
 
+//INPUT: 
+//OUTPUT: 
+//PRECONDITION: 
+//POSTCONDITION: 
 void TodoListManager::openList(const Date& d) {
 	if (!d.isValid()) return;
 
