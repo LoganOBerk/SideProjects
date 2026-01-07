@@ -1,4 +1,5 @@
 #include "TaskList.h"
+#include <sstream>
 void TaskList::serialize(std::ostream& out) const {
 	out << date.toString() << std::endl;
 	for (const auto& kv : taskList) {

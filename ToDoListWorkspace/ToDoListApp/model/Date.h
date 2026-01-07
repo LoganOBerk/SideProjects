@@ -1,6 +1,5 @@
 #include <iostream>
 #include <iomanip>
-#include <gtest/gtest.h>
 #include "Math.util.h"
 
 #ifndef DATE_UTIL_H

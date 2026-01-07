@@ -3,6 +3,7 @@
 #include "Task.h"
 #include "TaskList.h"
 #include "String.util.h"
+#include <sstream>
 
 void UI::welcomeMenu() {
 	std::cout << std::endl; std::cout << std::endl;
