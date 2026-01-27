@@ -21,20 +21,18 @@ void State::setCoords(const int config[yAxis][xAxis]) {
 
 
 
-State::State()
-	: p(nullptr), expO(0), g(0), h(0), f(0),
-	eX(0), eY(0), ii(0),
-	config{ {0,0,0}, {0,0,0}, {0,0,0} },
-	tileX{ 1,2,3,1,2,3,1,2,3 },
-	tileY{ 1,2,3,1,2,3,1,2,3 }
-{}
+State::State() : p(nullptr), expO(0), g(0), h(0), f(0), eX(0), eY(0), ii(0), config{ {0} } {
+	for (int t = 0; t < nTiles; t++) {
+		tileX[t] = (t % xAxis) + 1;
+		tileY[t] = (t / xAxis) + 1;
+	}
+}
 
 
 
-State::State(State* p, int expO, int g, int h, int ii, int config[yAxis][xAxis]) : p(p), expO(expO), g(g), h(h), ii(ii) {
+State::State(int config[yAxis][xAxis], State* p = nullptr, int g = 0) : p(p), g(g) {
 	setConfig(config);
 	setCoords(config);
-	f = g + h;
 	eX = tileX[0];
 	eY = tileY[0];
 }

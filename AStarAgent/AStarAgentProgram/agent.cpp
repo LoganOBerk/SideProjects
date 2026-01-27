@@ -12,13 +12,13 @@ int Agent::locY(int val, State& s) {
 }
 
 void Agent::setGoal(int goalConfig[yAxis][xAxis]) {
-	goal = State(nullptr, 1, 0, 0, 0, goalConfig);
+	goal = State(goalConfig, nullptr, 0);
 }
 
 
 
 void Agent::setInit(int initConfig[yAxis][xAxis]) {
-	init = State(nullptr, 1, 0, 0, 0, initConfig);
+	init = State(initConfig, nullptr, 0);
 	init.h = heuristic(init);
 }
 

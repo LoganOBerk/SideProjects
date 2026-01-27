@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="AStarAgentProgram.vcxproj" />
+  <Project Path="AStarAgentProgram.vcxproj" Id="750c61d3-0ef9-4482-9204-dabbaddf6404" />
 </Solution>

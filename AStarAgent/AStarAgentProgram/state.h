@@ -22,7 +22,7 @@ private:
 public:
 	//Constructors
 	State();
-	State(State*, int, int, int, int, int[yAxis][xAxis]);
+	State(int[yAxis][xAxis], State*, int);
 
 	//Setters for board configuration	
 	void setConfig(const int[yAxis][xAxis]);
