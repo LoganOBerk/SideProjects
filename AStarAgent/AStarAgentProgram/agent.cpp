@@ -88,39 +88,38 @@ void Agent::genChild(State* p, std::string d) {
 	int x = n->eX - 1;
 	int y = n->eY - 1;
 
-	//increment current states insertion index and assign its parent
-	n->ii = insertionIndex++;
-	n->p = p;
+
+	int h = 0; //horizontal direction offset
+	int v = 0; //vertical direction offset
+	int w = 0; //wind cost
+
 
 	//Assigning values we want to change
 	int* oldVal = &n->config[y][x];
 	int* oldX = &n->tileX[*oldVal];
 	int* oldY = &n->tileY[*oldVal];
-	int* newVal = oldVal; //Temp assign for newVal
+
 
 	//Direction handlers updating internal state of the copied pointer to represent new child
 	if (d == "LEFT") {
-		n->g += WITHWIND;
-		n->eX += LEFT;
-		newVal = &n->config[y][x + LEFT];
+		h = LEFT;
+		w = WITHWIND;
 	}
 	if (d == "RIGHT") {
-		n->g += AGAINSTWIND;
-		n->eX += RIGHT;
-		newVal = &n->config[y][x + RIGHT];
+		h = RIGHT;
+		w = AGAINSTWIND;
 	}
 	if (d == "UP") {
-		n->g += SIDEWIND;
-		n->eY += UP;
-		newVal = &n->config[y + UP][x];
+		v = UP;
+		w = SIDEWIND;
 	}
 	if (d == "DOWN") {
-		n->g += SIDEWIND;
-		n->eY += DOWN;
-		newVal = &n->config[y + DOWN][x];
+		v = DOWN;
+		w = SIDEWIND;
 	}
 
-	//Get newX and newY coordinates from our new Value
+	//Assign our new value to swap, find its x and y coordinates
+	int* newVal = &n->config[y + v][x + h];
 	int* newX = &n->tileX[*newVal];
 	int* newY = &n->tileY[*newVal];
 
@@ -129,10 +128,15 @@ void Agent::genChild(State* p, std::string d) {
 	std::swap(*oldY, *newY);
 	std::swap(*oldVal, *newVal);
 
+	n->p = p;                 //Update Parent
 
-	//Update all childrens heuristic based on new configuration and also update their f(n)
-	n->h = heuristic(*n);
-	n->f = n->h + n->g;
+	n->g += w;                //Update pathcost based on wind
+	n->h = heuristic(*n);     //Update Heuristic
+	n->f = n->h + n->g;       //Recalculate f(n)
+
+	n->eX += h;               //Shift x based on horizontal direction
+	n->eY += v;				  //Shift y based on vertical direction
+	n->ii = insertionIndex++; //Update order of insertion
 
 	//If the generated child is in the explored set and the path cost
 	//for the current child, g(n), is greater than or equal to the old child 
