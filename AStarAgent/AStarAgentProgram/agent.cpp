@@ -84,59 +84,32 @@ void Agent::genChild(State* p, std::string d) {
 	//make a pointer that is a copy of the passed in parent
 	State* n = new State(*p);
 
-	// reassign standard cartesian indexing to 0 based indexing
-	int x = n->eX - 1;
-	int y = n->eY - 1;
 
-
-	int h = 0; //horizontal direction offset
-	int v = 0; //vertical direction offset
+	int dx = 0; //horizontal direction offset
+	int dy = 0; //vertical direction offset
 	int w = 0; //wind cost
-
-
-	//Assigning values we want to change
-	int* oldVal = &n->config[y][x];
-	int* oldX = &n->tileX[*oldVal];
-	int* oldY = &n->tileY[*oldVal];
 
 
 	//Direction handlers updating internal state of the copied pointer to represent new child
 	if (d == "LEFT") {
-		h = LEFT;
+		dx = LEFT;
 		w = WITHWIND;
 	}
 	if (d == "RIGHT") {
-		h = RIGHT;
+		dx = RIGHT;
 		w = AGAINSTWIND;
 	}
 	if (d == "UP") {
-		v = UP;
+		dy = UP;
 		w = SIDEWIND;
 	}
 	if (d == "DOWN") {
-		v = DOWN;
+		dy = DOWN;
 		w = SIDEWIND;
 	}
 
-	//Assign our new value to swap, find its x and y coordinates
-	int* newVal = &n->config[y + v][x + h];
-	int* newX = &n->tileX[*newVal];
-	int* newY = &n->tileY[*newVal];
-
-	//Swap values and their coordinates
-	std::swap(*oldX, *newX);
-	std::swap(*oldY, *newY);
-	std::swap(*oldVal, *newVal);
-
-	n->p = p;                 //Update Parent
-
-	n->g += w;                //Update pathcost based on wind
-	n->h = heuristic(*n);     //Update Heuristic
-	n->f = n->h + n->g;       //Recalculate f(n)
-
-	n->eX += h;               //Shift x based on horizontal direction
-	n->eY += v;				  //Shift y based on vertical direction
-	n->ii = insertionIndex++; //Update order of insertion
+	n->moveTile(dx, dy);
+	n->updateState(p, w, heuristic(*n), insertionIndex++);
 
 	//If the generated child is in the explored set and the path cost
 	//for the current child, g(n), is greater than or equal to the old child 
