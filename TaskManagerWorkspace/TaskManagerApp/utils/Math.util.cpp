@@ -1,6 +1,6 @@
 #include <iomanip>
 
-#include "../utils/Math.util.h"
+#include "Math.util.h"
 
 //INPUT: m, an integer dividend; n, an integer divisor
 //OUTPUT: the modulus result, always non-negative

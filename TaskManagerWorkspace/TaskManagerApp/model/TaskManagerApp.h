@@ -1,11 +1,11 @@
 #pragma once
 
-#include "TodoListManager.h"
+#include "TaskListManager.h"
 #include "UI.h"
 
-class TodoListApp {
+class TaskManagerApp {
 private:
-    TodoListManager manager;
+    TaskListManager manager;
 
 public:
     // Main application loop

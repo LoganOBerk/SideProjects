@@ -19,10 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <VCProjectVersion>17.0</VCProjectVersion>
+    <VCProjectVersion>18.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{5c9bb851-b313-455b-b23e-53a640f11c46}</ProjectGuid>
-    <RootNamespace>ToDoListApp</RootNamespace>
+    <ProjectGuid>{2a775cc6-af8a-4112-83b8-e052bb38cfc8}</ProjectGuid>
+    <RootNamespace>TaskManagerAppTests</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -76,6 +76,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -90,11 +91,10 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -105,7 +105,6 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)ToDoListApp/main;$(SolutionDir)ToDoListApp/model;$(SolutionDir)ToDoListApp/ui;$(SolutionDir)ToDoListApp/utils</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -120,34 +119,23 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main\main.cpp" />
-    <ClCompile Include="model\Date.cpp" />
-    <ClCompile Include="model\Task.cpp" />
-    <ClCompile Include="model\TaskList.cpp" />
-    <ClCompile Include="model\TodoListApp.cpp" />
-    <ClCompile Include="model\TodoListManager.cpp" />
-    <ClCompile Include="ui\UI.cpp" />
-    <ClCompile Include="utils\Math.util.cpp" />
-    <ClCompile Include="utils\String.util.cpp" />
+    <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="model\Date.h" />
-    <ClInclude Include="model\Task.h" />
-    <ClInclude Include="model\TaskList.h" />
-    <ClInclude Include="model\TodoListApp.h" />
-    <ClInclude Include="model\TodoListManager.h" />
-    <ClInclude Include="ui\UI.h" />
-    <ClInclude Include="utils\Math.util.h" />
-    <ClInclude Include="utils\String.util.h" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TaskManagerApp\TaskManagerApp.vcxproj">
+      <Project>{53faee63-caa6-4404-b91c-93ab03e862fe}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

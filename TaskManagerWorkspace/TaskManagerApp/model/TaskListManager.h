@@ -6,7 +6,7 @@
 #include "Date.h"
 #include "UI.h"
 
-class TodoListManager {
+class TaskListManager {
 protected:
     std::map<Date, TaskList> taskLists;
 

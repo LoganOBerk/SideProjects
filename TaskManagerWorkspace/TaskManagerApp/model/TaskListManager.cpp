@@ -1,10 +1,10 @@
-#include "TodoListManager.h"
+#include "TaskListManager.h"
 
 //INPUT: 
 //OUTPUT: 
 //PRECONDITION: 
 //POSTCONDITION: 
-void TodoListManager::serialize(std::ostream& out) const {
+void TaskListManager::serialize(std::ostream& out) const {
 	for (const auto& kv : taskLists) {
 		kv.second.serialize(out);
 	}
@@ -14,7 +14,7 @@ void TodoListManager::serialize(std::ostream& out) const {
 //OUTPUT: 
 //PRECONDITION: 
 //POSTCONDITION: 
-void TodoListManager::deserialize(std::istream& in) {
+void TaskListManager::deserialize(std::istream& in) {
 	while (in.peek() != std::char_traits<char>::eof()) {
 		TaskList tl;
 		tl.deserialize(in);
@@ -26,7 +26,7 @@ void TodoListManager::deserialize(std::istream& in) {
 //OUTPUT: 
 //PRECONDITION: 
 //POSTCONDITION: 
-TaskList* TodoListManager::getList(const Date& d) {
+TaskList* TaskListManager::getList(const Date& d) {
 	auto it = taskLists.find(d);
 	return (it != taskLists.end()) ? &it->second : nullptr;
 }
@@ -35,7 +35,7 @@ TaskList* TodoListManager::getList(const Date& d) {
 //OUTPUT: 
 //PRECONDITION: 
 //POSTCONDITION: 
-bool TodoListManager::taskListExists(const Date& d) {
+bool TaskListManager::taskListExists(const Date& d) {
 	return getList(d);
 }
 
@@ -43,7 +43,7 @@ bool TodoListManager::taskListExists(const Date& d) {
 //OUTPUT: 
 //PRECONDITION: 
 //POSTCONDITION: 
-void TodoListManager::addTaskList(const TaskList& tl) {
+void TaskListManager::addTaskList(const TaskList& tl) {
 	taskLists.insert(std::pair<const Date, TaskList>(tl.getDate(), tl));
 }
 
@@ -51,7 +51,7 @@ void TodoListManager::addTaskList(const TaskList& tl) {
 //OUTPUT: 
 //PRECONDITION: 
 //POSTCONDITION: 
-void TodoListManager::createList(const Date& d) {
+void TaskListManager::createList(const Date& d) {
 	if (!d.isValid()) return;
 
 	if (taskListExists(d)) {
@@ -68,7 +68,7 @@ void TodoListManager::createList(const Date& d) {
 //OUTPUT: 
 //PRECONDITION: 
 //POSTCONDITION: 
-void TodoListManager::removeList(const Date& d) {
+void TaskListManager::removeList(const Date& d) {
 	if (!d.isValid()) return;
 
 	if (!taskListExists(d)) {
@@ -84,7 +84,7 @@ void TodoListManager::removeList(const Date& d) {
 //OUTPUT: 
 //PRECONDITION: 
 //POSTCONDITION: 
-void TodoListManager::openList(const Date& d) {
+void TaskListManager::openList(const Date& d) {
 	if (!d.isValid()) return;
 
 	if (!taskListExists(d)) {
