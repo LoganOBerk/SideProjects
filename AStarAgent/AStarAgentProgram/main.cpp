@@ -26,7 +26,7 @@ int main() {
 	acceptInitalAndGoalInputs(initConfig, goalConfig);
 
 	//Pass board states to the agent
-	Agent a(initConfig, goalConfig);
+	AStarAgent a(initConfig, goalConfig);
 
 	//Tell the agent to find the shortest path
 	a.findShortestPath();

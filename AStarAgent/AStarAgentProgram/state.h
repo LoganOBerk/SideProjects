@@ -5,6 +5,7 @@
 //State class used to represent the state of the game currently
 class State {
 	friend class Agent;
+	friend class AStarAgent;
 private:
 	State* p;                 //Parent game state
 	int expO;                 //Order of expansion, when popped from queue

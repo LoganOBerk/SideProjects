@@ -1,5 +1,6 @@
 #pragma once
 #include "agent.h"
+#include "astaragent.h"
 
 #include <conio.h>
 #include <string>

@@ -128,12 +128,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="agent.cpp" />
+    <ClCompile Include="astaragent.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="state.cpp" />
     <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="agent.h" />
+    <ClInclude Include="astaragent.h" />
     <ClInclude Include="globals.h" />
     <ClInclude Include="state.h" />
     <ClInclude Include="UI.h" />

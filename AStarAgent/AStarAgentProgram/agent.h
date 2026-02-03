@@ -8,7 +8,7 @@
 #pragma once
 //Agent wrapper class used for high level state handling and solution finding given init and goal 
 class Agent {
-private:
+protected:
 	State init;
 	State goal;
 
@@ -25,25 +25,28 @@ private:
 	int insertionIndex;
 	int locX(int val, State& s);
 	int locY(int val, State& s);
-	//tilesOutOfPlace helper function used inside heuristic to find all tiles currently not in correct spot
+	
+	//tilesOutOfPlace function used to find all tiles currently not in correct spot
 	int tilesOutOfPlace(const State& curr, const State& goal);
-
-	//Calculates provided heuristic formula based on board configuration
-	int heuristic(State& s);
+	void populateSolnSet(State*);
+	
 public:
 	//Agent constructor, and destructor
-	Agent(int[yAxis][xAxis], int[yAxis][xAxis]);
+	Agent(){};
 	~Agent();
-
+	
 	//Searching Algorithm
-	void findShortestPath();
+	virtual void findShortestPath() = 0;
 	//Child generation function handles which child to generate and when to skip
-	void genChild(State*, std::string);
-	void populateSolnSet(State*);
+	virtual void genChild(State*, std::string) = 0;
+	
 	//Setters for Agent constructor parameters allowing setting of various inital and goal states
-	void setInit(int[yAxis][xAxis]);
-	void setGoal(int[yAxis][xAxis]);
+	virtual void setInit(int[yAxis][xAxis]) = 0;
+	virtual void setGoal(int[yAxis][xAxis]) = 0;
 
 	//Printer for solution set, essentially popping off the stack one by one
 	void printSolutionSet();
+
+	
 };
+
