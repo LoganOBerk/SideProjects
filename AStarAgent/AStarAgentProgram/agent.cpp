@@ -118,7 +118,6 @@ void Agent::genChild(State* p, std::string d) {
 		delete n;
 		return;
 	}
-
 	//Update the explored set, frontier, and keep track of memory allocated
 	exploredSet[*n] = n->g;
 	frontier.push(n);
@@ -129,6 +128,7 @@ void Agent::genChild(State* p, std::string d) {
 
 void Agent::findShortestPath() {
 	State* n = &init; //Point to the initial State
+	bool solnExists = true;
 	int expansionOrder = 1;
 
 	while (true) {
@@ -147,6 +147,10 @@ void Agent::findShortestPath() {
 		if (n->eY > 1) genChild(n, "UP");
 		if (n->eY < yAxis) genChild(n, "DOWN");
 
+		if (frontier.empty()) {
+			solnExists = false;
+			break;
+		}
 		//Reassign our pointer to the item at the front of the frontier
 		n = frontier.top();
 		//Remove from frontier
@@ -156,7 +160,7 @@ void Agent::findShortestPath() {
 	}
 
 	//Once we hit our goal we want to push the solution path into the solutionSet
-	while (n != nullptr) {
+	while (n != nullptr && solnExists) {
 		solutionSet.push(n);
 		n = n->p;
 	}
@@ -165,6 +169,10 @@ void Agent::findShortestPath() {
 
 
 void Agent::printSolutionSet() {
+	if (solutionSet.empty()) {
+		std::cout << "No solution possible!" << std::endl;
+		std::cout << "Configurations Tried: " << exploredSet.size() << std::endl;
+	}
 	//Pop our solution set off the stack
 	while (!solutionSet.empty()) {
 		solutionSet.top()->printState();

@@ -15,8 +15,13 @@
 
 
 int main() {
-	int initConfig[yAxis][xAxis] = { { 1,6,2 },{ 5,7,8 },{ 0,4,3 } };
-	int goalConfig[yAxis][xAxis] = { { 7,8,1 },{ 6,0,2 },{ 5,4,3 } };
+	int initConfig[yAxis][xAxis] = { { 6,5,3 },
+									 { 7,1,4 },
+									 { 8,0,2 } };
+
+	int goalConfig[yAxis][xAxis] = { { 1,6,8 },
+									 { 2,0,5 },
+									 { 4,7,3 } };
 
 	Agent a(initConfig, goalConfig);
 	a.findShortestPath();
