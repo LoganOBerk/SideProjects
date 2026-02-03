@@ -13,7 +13,7 @@ void printBoardRules() {
 }
 
 //Ensures that the user can only input valid tiles and if not nothing happens
-int collectValidTileInput(std::bitset<nTiles>& isPlaced) {
+int collectValidTileInput(bool (&isPlaced)[nTiles]) {
 	char c;
 	int x = 0;
 	while (true) {
@@ -22,15 +22,15 @@ int collectValidTileInput(std::bitset<nTiles>& isPlaced) {
 		x = c - '0';
 
 		if (isPlaced[x]) continue;
-		isPlaced[x] = 1;
+		isPlaced[x] = true;
 		return x;
 	}
 }
 
 //Accepts a 2D array of size XxY and modifies it based on user input
 void acceptConfigInput(int(&config)[yAxis][xAxis]) {
-	//Binary tracking if a tile was placed, indexed by unique tile value
-	std::bitset<nTiles> isPlaced;
+	//Tracking if a tile was placed, indexed by unique tile value
+	bool isPlaced[nTiles]{false};
 
 	printBoardRules();
 
@@ -57,5 +57,9 @@ void acceptInitalAndGoalInputs(int(&init)[yAxis][xAxis], int(&goal)[yAxis][xAxis
 
 //Prints the solution set result provided by the agent
 void printSolution(Agent& a) {
+	std::cout << "===================" << std::endl;
+	std::cout << "Agent Solution Path" << std::endl;
+	std::cout << "===================" << std::endl;
+	std::cout << std::endl;
 	a.printSolutionSet();
 }

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include "globals.h"
 #pragma once
 //State class used to represent the state of the game currently

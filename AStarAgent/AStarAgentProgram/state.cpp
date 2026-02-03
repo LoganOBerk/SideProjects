@@ -108,13 +108,25 @@ State& State::operator=(const State& n) {
 
 
 void State::printState() {
+	int digits = static_cast<int>(std::log10(expO)) + 1;
+	int width = 9 - ((digits + 1)/2); // increment width for each extra digit
+
 	for (int i = 0; i < yAxis; i++) {
+		std::cout << std::setw(6);
 		for (int j = 0; j < xAxis; j++) {
-			(config[i][j] == 0) ? std::cout << "-" : std::cout << config[i][j]; std::cout << " ";
+			std::cout << "|";
+			if (config[i][j] == 0) std::cout << "-";
+			else std::cout << config[i][j];
+
+			
 		}
-		std::cout << std::endl;
+		std::cout  << "|" << std::endl;
 	}
+	std::cout << std::setw(11);
+	std::cout << "-----" << std::endl;
+	std::cout << std::setw(7);
 	std::cout << g << " | " << h << std::endl;
-	std::cout << " #" << expO << std::endl;
+	std::cout << std::setw(width);
+	std::cout << "#" << expO << std::endl;
 	std::cout << std::endl;
 }
