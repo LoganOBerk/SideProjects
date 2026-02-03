@@ -150,7 +150,7 @@ void Agent::findShortestPath() {
 		//If no solution exists the frontier will be completely exhausted, so we exit
 		if (frontier.empty()) {
 			solnExists = false;
-			break;
+			return;
 		}
 		//Reassign our pointer to the item at the front of the frontier
 		n = frontier.top();
@@ -159,15 +159,17 @@ void Agent::findShortestPath() {
 		//Update explored set
 		exploredSet[*n] = n->g;
 	}
-
-	//Once we hit our goal we want to push the solution path into the solutionSet
-	while (n != nullptr && solnExists) {
-		solutionSet.push(n);
-		n = n->p;
-	}
+	populateSolnSet(n, solnExists);
+	
 }
 
-
+void Agent::populateSolnSet(State* s, bool solnExists){
+	//Once we hit our goal we want to push the solution path into the solutionSet
+	while (s != nullptr && solnExists) {
+		solutionSet.push(s);
+		s = s->p;
+	}
+}
 
 void Agent::printSolutionSet(){
 	if (solutionSet.empty()) {
