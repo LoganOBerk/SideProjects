@@ -128,7 +128,6 @@ void Agent::genChild(State* p, std::string d) {
 
 void Agent::findShortestPath() {
 	State* n = &init; //Point to the initial State
-	bool solnExists = true;
 	int expansionOrder = 1;
 
 	while (true) {
@@ -148,8 +147,7 @@ void Agent::findShortestPath() {
 		if (n->eY < yAxis) genChild(n, "DOWN");
 
 		//If no solution exists the frontier will be completely exhausted, so we exit
-		if (frontier.empty()) {
-			solnExists = false;
+		if (frontier.empty()){
 			return;
 		}
 		//Reassign our pointer to the item at the front of the frontier
@@ -159,13 +157,13 @@ void Agent::findShortestPath() {
 		//Update explored set
 		exploredSet[*n] = n->g;
 	}
-	populateSolnSet(n, solnExists);
+	populateSolnSet(n);
 	
 }
 
-void Agent::populateSolnSet(State* s, bool solnExists){
+void Agent::populateSolnSet(State* s){
 	//Once we hit our goal we want to push the solution path into the solutionSet
-	while (s != nullptr && solnExists) {
+	while (s != nullptr) {
 		solutionSet.push(s);
 		s = s->p;
 	}

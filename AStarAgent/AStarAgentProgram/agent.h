@@ -39,7 +39,7 @@ public:
 	void findShortestPath();
 	//Child generation function handles which child to generate and when to skip
 	void genChild(State*, std::string);
-	void populateSolnSet(State*, bool);
+	void populateSolnSet(State*);
 	//Setters for Agent constructor parameters allowing setting of various inital and goal states
 	void setInit(int[yAxis][xAxis]);
 	void setGoal(int[yAxis][xAxis]);
