@@ -147,6 +147,7 @@ void Agent::findShortestPath() {
 		if (n->eY > 1) genChild(n, "UP");
 		if (n->eY < yAxis) genChild(n, "DOWN");
 
+		//If no solution exists the frontier will be completely exhausted, so we exit
 		if (frontier.empty()) {
 			solnExists = false;
 			break;
@@ -168,7 +169,7 @@ void Agent::findShortestPath() {
 
 
 
-void Agent::printSolutionSet() {
+void Agent::printSolutionSet(){
 	if (solutionSet.empty()) {
 		std::cout << "No solution possible!" << std::endl;
 		std::cout << "Configurations Tried: " << exploredSet.size() << std::endl;

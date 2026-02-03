@@ -9,23 +9,30 @@
 # time complexity of locX and locY functions from O(N^2) to O(1), and in turn giving ability
 # to reduce the time complexity of tilesOutOfPlace function from O(N^2) to O(N)
 #
+# Modification Date : 2 / 2 / 2026
+# Purpose : Added UI as a seperate implementation and allowed user to input their desired board
+# also solved program bug, when a solution cant be found we actually output solution not found
+# and the number of configurations that were tried
 */
 
-#include "agent.h"
-
+#include "UI.h"
 
 int main() {
-	int initConfig[yAxis][xAxis] = { { 6,5,3 },
-									 { 7,1,4 },
-									 { 8,0,2 } };
+	//Set up board states
+	int initConfig[yAxis][xAxis]{};
+	int goalConfig[yAxis][xAxis]{};
 
-	int goalConfig[yAxis][xAxis] = { { 1,6,8 },
-									 { 2,0,5 },
-									 { 4,7,3 } };
+	//Allow user to set board states
+	acceptInitalAndGoalInputs(initConfig, goalConfig);
 
+	//Pass board states to the agent
 	Agent a(initConfig, goalConfig);
+
+	//Tell the agent to find the shortest path
 	a.findShortestPath();
-	a.printSolutionSet();
+
+	//Print the agents result
+	printSolution(a);
 
 
 	return 0;
