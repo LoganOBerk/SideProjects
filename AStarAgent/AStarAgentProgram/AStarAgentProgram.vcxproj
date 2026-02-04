@@ -127,17 +127,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="agent.cpp" />
-    <ClCompile Include="astaragent.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="state.cpp" />
+    <ClCompile Include="Agent.cpp" />
+    <ClCompile Include="AStarAgent.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="State.cpp" />
     <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="agent.h" />
-    <ClInclude Include="astaragent.h" />
-    <ClInclude Include="globals.h" />
-    <ClInclude Include="state.h" />
+    <ClInclude Include="Agent.h" />
+    <ClInclude Include="AStarAgent.h" />
+    <ClInclude Include="Globals.h" />
+    <ClInclude Include="State.h" />
     <ClInclude Include="UI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

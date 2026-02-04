@@ -1,15 +1,15 @@
 #pragma once
-#include "agent.h"
-#include "astaragent.h"
 
+#include <array>
 #include <conio.h>
 #include <string>
-#include <array>
-#include <bitset>
 
-//Basic UI functionality for user input handling
+#include "AStarAgent.h"
+
+// Basic UI functionality for user input handling
 void printBoardRules();
-int collectValidTileInput(bool(&)[nTiles]);
-void acceptConfigInput(int(&)[yAxis][xAxis]);
-void acceptInitalAndGoalInputs(int(&)[yAxis][xAxis], int(&)[yAxis][xAxis]);
 void printSolution(Agent&);
+
+int collectValidTileInput(bool(&)[nTiles]);
+void collectConfigInput(int(&)[yAxis][xAxis]);
+void collectInitalAndGoalInputs(int(&)[yAxis][xAxis], int(&)[yAxis][xAxis]);
