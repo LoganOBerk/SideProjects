@@ -14,7 +14,7 @@ void printBoardRules() {
 }
 
 // Ensures that the user can only input valid tiles; if not, nothing happens
-int collectValidTileInput(bool(&isPlaced)[nTiles]) {
+const int collectValidTileInput(bool(&isPlaced)[nTiles]) {
 	char c;
 	int x = 0;
 	while (true) {

@@ -10,6 +10,6 @@
 void printBoardRules();
 void printSolution(Agent&);
 
-int collectValidTileInput(bool(&)[nTiles]);
+const int collectValidTileInput(bool(&)[nTiles]);
 void collectConfigInput(int(&)[yAxis][xAxis]);
 void collectInitalAndGoalInputs(int(&)[yAxis][xAxis], int(&)[yAxis][xAxis]);

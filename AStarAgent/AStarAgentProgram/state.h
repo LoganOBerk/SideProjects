@@ -47,11 +47,12 @@ public:
 	void setConfig(const int[yAxis][xAxis]);
 	void setCoords(const int[yAxis][xAxis]);
 
-	void moveTile(int, int);
-	void updateState(State*, int, int, int);
+	void moveTile(const int&,const int&);
+	void updateState(State*, const int&, const int&, const int&);
 
 	// Prints gamestate values including board config in predefined manner
-	void printState();
+	void printState() const;
+
 
 	// Necessary overloaded operators and functors
 	State& operator=(const State& n);

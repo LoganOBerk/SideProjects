@@ -43,7 +43,7 @@ void AStarAgent::findShortestPath() {
 	populateSolnSet(n);
 }
 
-void AStarAgent::genChild(State* p, std::string d) {
+void AStarAgent::genChild(State* p, const std::string d) {
 	// Make a pointer that is a copy of the passed-in parent
 	State* n = new State(*p);
 

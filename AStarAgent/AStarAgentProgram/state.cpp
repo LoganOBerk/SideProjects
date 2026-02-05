@@ -17,10 +17,10 @@ void State::setCoords(const int config[yAxis][xAxis]) {
 	}
 }
 
-void State::moveTile(int dx, int dy) {
+void State::moveTile(const int& dx, const int& dy) {
 	// Reassign standard cartesian indexing to 0 based indexing
-	int x = eX - 1;
-	int y = eY - 1;
+	const int x = eX - 1;
+	const int y = eY - 1;
 
 	// Assigning values we want to change
 	int* oldVal = &config[y][x];
@@ -41,7 +41,7 @@ void State::moveTile(int dx, int dy) {
 	eY += dy; // Shift y based on vertical direction
 }
 
-void State::updateState(State* p, int w, int h, int ii) {
+void State::updateState(State* p, const int& w, const int& h, const int& ii) {
 	this->p = p;     // Update parent
 	this->g += w;     // Update path cost based on wind
 	this->h = h;     // Update heuristic
@@ -101,10 +101,10 @@ State& State::operator=(const State& n) {
 	return *this;
 }
 
-void State::printState() {
-	int expODig = static_cast<int>(std::log10(expO)) + 1;
-	int boardWidth = 3 + xAxis * 2;
-	int expOW = boardWidth - ((expODig + 1) / 2); // Increment width for each extra digit
+void State::printState() const{
+	const int expODig = static_cast<int>(std::log10(expO)) + 1;
+	const int boardWidth = 3 + xAxis * 2;
+	const int expOW = boardWidth - ((expODig + 1) / 2); // Increment width for each extra digit
 
 	for (int i = 0; i < yAxis; i++) {
 		std::cout << std::setw(6);

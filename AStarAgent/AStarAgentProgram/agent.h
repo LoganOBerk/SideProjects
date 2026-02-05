@@ -31,11 +31,11 @@ protected:
 	// Index used to keep track of when a state was inserted for tie breaks
 	int insertionIndex = 0;
 
-	int locX(int val, State& s);
-	int locY(int val, State& s);
+	const int locX(const int val, const State& s) const;
+	const int locY(const int val, const State& s) const;
 
 	// tilesOutOfPlace function used to find all tiles currently not in correct spot
-	int tilesOutOfPlace(const State& curr, const State& goal);
+	const int tilesOutOfPlace(const State& curr, const State& goal) const;
 	void populateSolnSet(State*);
 
 public:
@@ -47,7 +47,7 @@ public:
 	virtual void findShortestPath() = 0;
 
 	// Child generation function handles which child to generate and when to skip
-	virtual void genChild(State*, std::string) = 0;
+	virtual void genChild(State*, const std::string) = 0;
 
 	// Setters for Agent constructor parameters allowing setting of various initial and goal states
 	virtual void setInit(int[yAxis][xAxis]) = 0;
