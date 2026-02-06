@@ -1,11 +1,11 @@
 #pragma once
 
 // Board dimensions, extensibility is limited to 3x3 due to memory limitations of A*
-static const unsigned int yAxis = 3;
-static const unsigned int xAxis = 3;
+static const int yAxis = 3;
+static const int xAxis = 3;
 
 // Define the max numbering range for board eg. 9 (0–8)
-static const unsigned int nTiles = xAxis * yAxis;
+static const int nTiles = xAxis * yAxis;
 
 // Defines wind strength weights
 enum windStrength {
