@@ -43,7 +43,7 @@ void State::moveEmptySpace(const int& dx, const int& dy) {
 
 void State::updateState(State* p, const int& w, const int& h, const int& ii) {
 	this->p = p;     // Update parent
-	this->g += w;     // Update path cost based on wind
+	this->g += (w + stepCost);     // Update path cost based on wind
 	this->h = h;     // Update heuristic
 	this->f = h + g; // Recalculate f(n)
 	this->ii = ii;    // Update order of insertion

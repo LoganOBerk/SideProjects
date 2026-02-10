@@ -1,9 +1,7 @@
 #pragma once
 
 #include <array>
-#include <conio.h>
 #include <string>
-
 #include "AStarAgent.h"
 
 // Basic UI functionality for user input handling

@@ -18,7 +18,13 @@ const int collectValidTileInput(bool(&isPlaced)[nTiles]) {
 	char c;
 	int x = 0;
 	while (true) {
-		c = _getch();
+
+		#if defined(__linux__)
+			c = getch();
+		#else
+			c = _getch();
+		#endif
+
 		if (c < '0' || c >= nTiles + '0') continue;
 		x = c - '0';
 

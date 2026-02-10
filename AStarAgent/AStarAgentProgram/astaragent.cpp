@@ -98,19 +98,19 @@ int AStarAgent::heuristic(State& s) {
 		//if a tile is moving WEST its moving against the eastwind, if its moving EAST its moving against the westwind
 		if (x < 0) {
 			x = abs(x);
-			x *= EASTWIND;
+			x *= (stepCost + EASTWIND);
 		}
 		else if (x > 0) {
-			x *= WESTWIND;
+			x *= (stepCost + WESTWIND);
 		}
 
 		//if a tile is moving SOUTH its moving against the northwind, if its moving NORTH its moving against the southwind
 		if (y < 0) {
 			y = abs(y);
-			y *= NORTHWIND;
+			y *= (stepCost + NORTHWIND);
 		}
 		else if (y > 0) {
-			y *= SOUTHWIND;
+			y *= (stepCost + SOUTHWIND);
 		}
 
 		totalManhattan += (x + y);
