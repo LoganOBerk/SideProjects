@@ -105,6 +105,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)AStarAgentProgram/main;$(SolutionDir)AStarAgentProgram/model;$(SolutionDir)AStarAgentProgram/ui;$(SolutionDir)AStarAgentProgram/utils</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -127,18 +128,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Agent.cpp" />
-    <ClCompile Include="AStarAgent.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="State.cpp" />
-    <ClCompile Include="UI.cpp" />
+    <ClCompile Include="main\Main.cpp" />
+    <ClCompile Include="model\Agent.cpp" />
+    <ClCompile Include="model\AStarAgent.cpp" />
+    <ClCompile Include="model\State.cpp" />
+    <ClCompile Include="ui\UI.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Agent.h" />
-    <ClInclude Include="AStarAgent.h" />
-    <ClInclude Include="Globals.h" />
-    <ClInclude Include="State.h" />
-    <ClInclude Include="UI.h" />
+    <ClInclude Include="model\Agent.h" />
+    <ClInclude Include="model\AStarAgent.h" />
+    <ClInclude Include="model\State.h" />
+    <ClInclude Include="ui\UI.h" />
+    <ClInclude Include="utils\Globals.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -15,36 +15,36 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Agent.cpp">
+    <ClCompile Include="main\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main.cpp">
+    <ClCompile Include="model\Agent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="State.cpp">
+    <ClCompile Include="model\AStarAgent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UI.cpp">
+    <ClCompile Include="model\State.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AStarAgent.cpp">
+    <ClCompile Include="ui\UI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="State.h">
+    <ClInclude Include="model\Agent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Globals.h">
+    <ClInclude Include="model\AStarAgent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Agent.h">
+    <ClInclude Include="model\State.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="UI.h">
+    <ClInclude Include="ui\UI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AStarAgent.h">
+    <ClInclude Include="utils\Globals.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
