@@ -20,16 +20,15 @@ void AStarAgent::findShortestPath() {
 		}
 
 		// Generate child based on empty space's possible moves
-		if (n->eX > 1) genChild(n, "LEFT");
-		if (n->eX < xAxis) genChild(n, "RIGHT");
-		if (n->eY > 1) genChild(n, "UP");
-		if (n->eY < yAxis) genChild(n, "DOWN");
+		if (n->eX > 1) genChild(n, "WEST");
+		if (n->eX < xAxis) genChild(n, "EAST");
+		if (n->eY > 1) genChild(n, "NORTH");
+		if (n->eY < yAxis) genChild(n, "SOUTH");
 
 		// If no solution exists, the frontier will be completely exhausted, so we exit
 		if (frontier.empty()) {
 			return;
 		}
-
 		// Reassign our pointer to the item at the front of the frontier
 		n = frontier.top();
 
@@ -51,25 +50,27 @@ void AStarAgent::genChild(State* p, const std::string d) {
 	int dy = 0; // vertical direction offset
 	int w = 0; // wind cost
 
-	// Direction handlers updating internal state of the copied pointer to represent new child
-	if (d == "LEFT") {
-		dx = LEFT;
-		w = WITHWIND;
+	// Direction handlers for empty space movement, an empty space movement direction 
+	// corresponds to the exact wind strength the adjacent tile is moving against
+	// EXAMPLE: if an empty space moves north the adjacent tile is moving south against the northwind
+	if (d == "WEST") {
+		dx = WEST;
+		w = WESTWIND;
 	}
-	if (d == "RIGHT") {
-		dx = RIGHT;
-		w = AGAINSTWIND;
+	if (d == "EAST") {
+		dx = EAST;
+		w = EASTWIND;
 	}
-	if (d == "UP") {
-		dy = UP;
-		w = SIDEWIND;
+	if (d == "NORTH") {
+		dy = NORTH;
+		w = NORTHWIND;
 	}
-	if (d == "DOWN") {
-		dy = DOWN;
-		w = SIDEWIND;
+	if (d == "SOUTH") {
+		dy = SOUTH;
+		w = SOUTHWIND;
 	}
 
-	n->moveTile(dx, dy);
+	n->moveEmptySpace(dx, dy);
 	n->updateState(p, w, heuristic(*n), insertionIndex++);
 
 	// If the generated child is in the explored set and the path cost
@@ -94,19 +95,22 @@ int AStarAgent::heuristic(State& s) {
 		x = locX(t, goal) - locX(t, s); // calculate x param of Manhattan before absolute value
 		y = locY(t, goal) - locY(t, s); // calculate y param of Manhattan before absolute value
 
-		// Identify if the difference is negative; this gives an idea of direction
+		//if a tile is moving WEST its moving against the eastwind, if its moving EAST its moving against the westwind
 		if (x < 0) {
 			x = abs(x);
-			x *= WITHWIND;
+			x *= EASTWIND;
 		}
 		else if (x > 0) {
-			x *= AGAINSTWIND;
+			x *= WESTWIND;
 		}
 
-		// Since vertical distance has the same cost UP or DOWN, there is only one handler
-		if (y != 0) {
+		//if a tile is moving SOUTH its moving against the northwind, if its moving NORTH its moving against the southwind
+		if (y < 0) {
 			y = abs(y);
-			y *= SIDEWIND;
+			y *= NORTHWIND;
+		}
+		else if (y > 0) {
+			y *= SOUTHWIND;
 		}
 
 		totalManhattan += (x + y);

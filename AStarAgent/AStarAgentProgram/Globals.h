@@ -9,15 +9,16 @@ static const int nTiles = xAxis * yAxis;
 
 // Defines wind strength weights
 enum windStrength {
-	WITHWIND = 1,
-	SIDEWIND = 2,
-	AGAINSTWIND = 3,
+	WESTWIND = 3,
+	NORTHWIND = 2,
+	SOUTHWIND = 2,
+	EASTWIND = 1,
 };
 
 // Defines movement in cartesian directions
 enum CartesianDirection {
-	LEFT = -1,
-	RIGHT = 1,
-	UP = -1, // Up is negative because in an array grid, UP reduces the y index
-	DOWN = 1   // Down is positive because in an array grid, DOWN increases the y index
+	WEST = -1,
+	EAST = 1,
+	NORTH = -1, // NORTH is negative because in an array grid, NORTH reduces the y index
+	SOUTH = 1   // SOUTH is positive because in an array grid, SOUTH increases the y index
 };

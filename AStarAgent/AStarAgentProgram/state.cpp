@@ -17,7 +17,7 @@ void State::setCoords(const int config[yAxis][xAxis]) {
 	}
 }
 
-void State::moveTile(const int& dx, const int& dy) {
+void State::moveEmptySpace(const int& dx, const int& dy) {
 	// Reassign standard cartesian indexing to 0 based indexing
 	const int x = eX - 1;
 	const int y = eY - 1;

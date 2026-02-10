@@ -47,7 +47,7 @@ public:
 	void setConfig(const int[yAxis][xAxis]);
 	void setCoords(const int[yAxis][xAxis]);
 
-	void moveTile(const int&,const int&);
+	void moveEmptySpace(const int&,const int&);
 	void updateState(State*, const int&, const int&, const int&);
 
 	// Prints gamestate values including board config in predefined manner
