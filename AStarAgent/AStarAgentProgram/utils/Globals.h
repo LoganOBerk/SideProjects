@@ -10,19 +10,27 @@
 // Board dimensions, extensibility is limited to 3x3 due to memory limitations of A*
 static const int yAxis = 3;
 static const int xAxis = 3;
-static const int stepCost = 1;
+
 // Define the max numbering range for board eg. 9 (0–8)
 static const int nTiles = xAxis * yAxis;
-
 
 #define WINDIRWEST 1
 #define WINDIREAST 0
 #define WINDIRNORTH 0
 #define WINDIRSOUTH 0
 
+//Cost of a standard move with no wind
+static const int stepCost = 1;
 
-constexpr const int oppWin = 0; //Strength of the opposing wind
-constexpr const int windStr = 2 - oppWin; //Strength of the wind
+//Base wind strength values
+constexpr const int str = 2; //Base Wind Strength
+constexpr const int op = 0;  //Opposing Wind Strength
+
+
+
+//Wind strength calculations
+constexpr const int oppWin = op; //Strength of the opposing wind
+constexpr const int windStr = str - op; //Strength of the wind
 constexpr const int sideWin = windStr/2; //Strength of perpendicular wind
 
 
@@ -49,6 +57,11 @@ enum windStrength {
 	NORTHWIND = oppWin, 
 	EASTWIND = sideWin,  
 	WESTWIND = sideWin,
+#else
+	SOUTHWIND = 0,
+	NORTHWIND = 0,
+	EASTWIND = 0,
+	WESTWIND = 0,
 #endif
 
 };
