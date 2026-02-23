@@ -65,7 +65,7 @@
 		int getDay() const;
 		int getYear() const;
 		bool isValid() const;
-		std::string toString() const;
+		std::string str() const;
 
 		// Comparison operators
 		bool operator<(const Date&) const;

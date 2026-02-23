@@ -6,7 +6,7 @@
 //PRECONDITION: 
 //POSTCONDITION: 
 void TaskList::serialize(std::ostream& out) const {
-	out << date.toString() << std::endl;
+	out << date.str() << std::endl;
 	for (const auto& kv : taskList) {
 		kv.second.serialize(out);
 	}
