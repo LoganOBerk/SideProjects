@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main\main.cpp" />
+    <ClCompile Include="main\Main.cpp" />
     <ClCompile Include="model\Date.cpp" />
     <ClCompile Include="model\Task.cpp" />
     <ClCompile Include="model\TaskList.cpp" />

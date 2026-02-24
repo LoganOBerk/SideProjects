@@ -65,7 +65,7 @@ bool Date::isValid() const {
 //OUTPUT: 
 //PRECONDITION: 
 //POSTCONDITION: 
-std::string Date::toString() const {
+std::string Date::str() const {
 	return std::to_string(month) + "/" + std::to_string(day) + "/" + std::to_string(year);
 }
 

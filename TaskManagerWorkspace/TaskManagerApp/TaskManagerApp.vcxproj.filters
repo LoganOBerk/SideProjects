@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main\main.cpp">
+    <ClCompile Include="main\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="model\Date.cpp">
