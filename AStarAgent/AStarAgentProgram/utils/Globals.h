@@ -10,7 +10,7 @@
 // Board dimensions, extensibility is limited to 3x3 due to memory limitations of A*
 static const int yAxis = 3;
 static const int xAxis = 3;
-static const int stepCost = 1;
+static const int stepCost = 1; //Default step cost
 // Define the max numbering range for board eg. 9 (0–8)
 static const int nTiles = xAxis * yAxis;
 
@@ -21,8 +21,11 @@ static const int nTiles = xAxis * yAxis;
 #define WINDIRSOUTH 0
 
 
-constexpr const int oppWin = 0; //Strength of the opposing wind
-constexpr const int windStr = 2 - oppWin; //Strength of the wind
+constexpr const int oppStr = 0; //Opposing strength of opposite wind
+constexpr const int str = 2;    //Strength of wind
+
+constexpr const int oppWin = oppStr; //Strength of the opposing wind
+constexpr const int windStr = str - oppStr; //Strength of the wind
 constexpr const int sideWin = windStr/2; //Strength of perpendicular wind
 
 
