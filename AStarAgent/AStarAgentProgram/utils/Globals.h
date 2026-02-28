@@ -19,8 +19,6 @@ static const int nTiles = xAxis * yAxis;
 #define WINDIRNORTH 0
 #define WINDIRSOUTH 0
 
-//Cost of a standard move with no wind
-static const int stepCost = 1;
 
 //Base wind strength values
 constexpr const int str = 2; //Base Wind Strength
