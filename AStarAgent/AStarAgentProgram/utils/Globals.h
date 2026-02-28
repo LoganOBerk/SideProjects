@@ -10,7 +10,7 @@
 // Board dimensions, extensibility is limited to 3x3 due to memory limitations of A*
 static const int yAxis = 3;
 static const int xAxis = 3;
-
+static const int stepCost = 1; //Default step cost
 // Define the max numbering range for board eg. 9 (0–8)
 static const int nTiles = xAxis * yAxis;
 

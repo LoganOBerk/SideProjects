@@ -16,8 +16,11 @@
 */
 
 #include "UI.h"
+#include <chrono>
 
 int main() {
+	auto start = std::chrono::steady_clock::now();
+
 	// Set up board states
 	int initConfig[yAxis][xAxis]{};
 	int goalConfig[yAxis][xAxis]{};
@@ -33,6 +36,12 @@ int main() {
 
 	// Print the agent's result
 	printSolution(a);
+
+	auto end = std::chrono::steady_clock::now();
+
+	auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+
+	std::cout << "Time elapsed: " << duration.count() << " ms" << std::endl;
 
 	return 0;
 }
