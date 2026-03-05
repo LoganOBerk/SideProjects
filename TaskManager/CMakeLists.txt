@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.21)
 
 project(TaskManager
     VERSION 1.0.0
-    DESCRIPTION "A command-line To-do List Manager"
+    DESCRIPTION "A command-line Task Manager"
     LANGUAGES CXX
 )
 
