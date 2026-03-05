@@ -1,10 +1,11 @@
+#pragma once
+
 #include <iostream>
 #include <iomanip>
 #include <string>
 #include "Math.util.h"
 
-#ifndef DATE_UTIL_H
-#define DATE_UTIL_H
+
 	// PURPOSE: Represents a number of months to be added or subtracted from a Date.
 	// Used in operator overloading for intuitive date manipulation with months.
 	struct Month {
@@ -96,4 +97,3 @@
 		Date operator--(int);
 
 	};
-#endif
